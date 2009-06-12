@@ -8,14 +8,14 @@ import array.doubleArray2D;
 public class BetterMemStorage extends AbstractStorage {
 	private doubleArray2D datum;
 
-	public BetterMemStorage(double[][] results, String[] names) {
+	public BetterMemStorage(final double[][] results, final String[] names) {
 		super(names);
 		this.rowsNum = results[0].length;
 
 		put(results);
 	}
 
-	private void put(double[][] results) {
+	private void put(final double[][] results) {
 		try {
 			datum = new doubleArray2D(results);
 			for (int i = 0; i < results.length; i++) {
@@ -30,7 +30,7 @@ public class BetterMemStorage extends AbstractStorage {
 		}
 	}
 
-	public BetterMemStorage(int colsNum, int rowsNum, String[] names) {
+	public BetterMemStorage(final int colsNum, final int rowsNum, String[] names) {
 		super(names);
 		this.rowsNum = rowsNum;
 
@@ -46,7 +46,7 @@ public class BetterMemStorage extends AbstractStorage {
 	 * 
 	 * @see dynsim.simulator.ResultsData#get(int)
 	 */
-	public double[] getAll(int i) {
+	public double[] getAll(final int i) {
 		return (datum.toJava())[i];
 	}
 
@@ -81,11 +81,11 @@ public class BetterMemStorage extends AbstractStorage {
 		return 0;
 	}
 
-	public double get(int c, int r) {
+	public double get(final int c, final int r) {
 		return datum.get(c, r);
 	}
 
-	public void put(int c, int r, double v) {
+	public void put(final int c, final int r, final double v) {
 		datum.set(c, r, v);
 		notifyValue(c, v);
 	}

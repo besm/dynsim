@@ -59,15 +59,15 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 	// auto. a una cantidad suficiente; incluir potencias.
 	// subticks...acabar log scale
 
-	public Grapher2D(int w, int h) {
+	public Grapher2D(final int w, final int h) {
 		this(w, h, null, null, null);
 	}
 
-	public Grapher2D(int w, int h, Axis xa, Axis ya) {
+	public Grapher2D(final int w, final int h, final Axis xa, final Axis ya) {
 		this(w, h, xa, ya, null);
 	}
 
-	public Grapher2D(int w, int h, Axis xa, Axis ya, GrapherConfig conf) {
+	public Grapher2D(final int w, final int h, final Axis xa, final Axis ya, final GrapherConfig conf) {
 		super(w, h);
 
 		if (conf != null) {
@@ -81,7 +81,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		init();
 	}
 
-	public Grapher2D(int w, int h, GrapherConfig conf) {
+	public Grapher2D(final int w, final int h, final GrapherConfig conf) {
 		this(w, h, null, null, conf);
 	}
 
@@ -90,7 +90,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 	 * 
 	 * @see dynsim.graphics.plot.GrapherI#addData(dynsim.data.Storage)
 	 */
-	public void addData(Storage data) {
+	public void addData(final Storage data) {
 		dataSlots.addStorage(data);
 	}
 
@@ -100,8 +100,8 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 	 * @see dynsim.graphics.plot.GrapherI#addData(dynsim.data.Storage,
 	 * dynsim.simulator.color.ColoringStrategy)
 	 */
-	public void addData(Storage data, ColoringStrategy colors) {
-		DataSlot slot = new DataSlot(data);
+	public void addData(final Storage data, final ColoringStrategy colors) {
+		final DataSlot slot = new DataSlot(data);
 		slot.setColoring(colors.getColors(data));
 		addSlot(slot);
 	}
@@ -113,7 +113,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 	 * dynsim.graphics.plot.GrapherI#addMarker(dynsim.math.analysis.local.CPoint
 	 * )
 	 */
-	public void addMarker(CPoint fp) {
+	public void addMarker(final CPoint fp) {
 		markerLayer.addMarker(fp);
 	}
 
@@ -122,7 +122,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 	 * 
 	 * @see dynsim.graphics.plot.GrapherI#addSlot(dynsim.data.DataSlot)
 	 */
-	public void addSlot(DataSlot slot) {
+	public void addSlot(final DataSlot slot) {
 		dataSlots.addDataSlot(slot);
 	}
 
@@ -131,7 +131,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 	 * 
 	 * @see dynsim.graphics.plot.GrapherI#checkAxesBounds(double, double)
 	 */
-	public void checkAxesBounds(double x, double y) {
+	public void checkAxesBounds(final double x, final double y) {
 		axesUpdater.checkAxesBounds(x, y, this);
 	}
 
@@ -140,8 +140,8 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 	 * 
 	 * @see dynsim.graphics.plot.GrapherI#checkBounds(float, float)
 	 */
-	public boolean checkBounds(float x, float y) {
-		Rectangle bounds = new Rectangle(getHalfMW(), getHalfMH(), getWidth() - getHalfMW(), getHeight() - getHalfMH());
+	public boolean checkBounds(final float x, final float y) {
+		final Rectangle bounds = new Rectangle(getHalfMW(), getHalfMH(), getWidth() - getHalfMW(), getHeight() - getHalfMH());
 
 		return bounds.contains(x, y);
 	}
@@ -264,11 +264,11 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		return markerLayer.hasMarkerPoints();
 	}
 
-	public boolean notInAxisRange(float x, float y) {
+	public boolean notInAxisRange(final float x, final float y) {
 		return (!yAxis.inAxisRange(y) || !xAxis.inAxisRange(x));
 	}
 
-	public void paint(Graphics g) {
+	public void paint(final Graphics g) {
 		if (painting) {
 			try {
 				before();
@@ -290,7 +290,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		}
 	}
 
-	public void plot(double[] x, double[] y) {
+	public void plot(final double[] x, final double[] y) {
 		switch (config.getPlotStyle()) {
 		case GrapherConfig.LINES:
 			plotLines(x, y);
@@ -304,7 +304,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		}
 	}
 
-	public void plot(double[] x, double[] y, int[] c) {
+	public void plot(final double[] x, final double[] y, final int[] c) {
 		switch (config.getPlotStyle()) {
 		case GrapherConfig.LINES:
 			plotLines(x, y, c);
@@ -402,15 +402,15 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		yAxis = axis;
 	}
 
-	public void setDataSlots(DataSlotList slots) {
+	public void setDataSlots(final DataSlotList slots) {
 		this.dataSlots = slots;
 	}
 
-	public void setGrapherConfig(GrapherConfig pconf) {
+	public void setGrapherConfig(final GrapherConfig pconf) {
 		this.config = pconf;
 	}
 
-	public void setNeedRepaint(boolean needRepaint) {
+	public void setNeedRepaint(final boolean needRepaint) {
 		this.needRepaint = needRepaint;
 	}
 
@@ -483,10 +483,10 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		addMouseListener(new Grapher2DMouseListener());
 	}
 
-	protected void plotCurves(double[] x, double[] y) {
-		int controlPointsNum = config.getCurveControlPointsNum();
+	protected void plotCurves(final double[] x, final double[] y) {
+		final int controlPointsNum = config.getCurveControlPointsNum();
 		double[] ct = new double[controlPointsNum * 3];
-		int ch = x.length / controlPointsNum;
+		final int ch = x.length / controlPointsNum;
 
 		if (ch > 0) {
 			for (int i = 0; i < ch; i++) {
@@ -495,7 +495,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 			}
 		}
 
-		int rs = x.length % controlPointsNum;
+		final int rs = x.length % controlPointsNum;
 
 		if (rs > 0) {
 			ct = new double[rs * 3];
@@ -504,10 +504,10 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		}
 	}
 
-	protected void plotCurves(double[] x, double[] y, int[] c) {
-		int controlPointsNum = config.getCurveControlPointsNum();
+	protected void plotCurves(final double[] x, final double[] y, final int[] c) {
+		final int controlPointsNum = config.getCurveControlPointsNum();
 		double[] ct = new double[controlPointsNum * 3];
-		int ch = x.length / controlPointsNum;
+		final int ch = x.length / controlPointsNum;
 
 		if (ch > 0) {
 			for (int i = 0; i < ch; i++) {
@@ -526,12 +526,12 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		}
 	}
 
-	protected void plotLines(double[] x, double[] y) {
+	protected void plotLines(final double[] x, final double[] y) {
 		plotLines(x, y, getStrokeColor());
 	}
 
 	// TODO Refactor
-	protected void plotLines(double[] x, double[] y, Color c) {
+	protected void plotLines(final double[] x, final double[] y, final Color c) {
 		double lx = x[0];
 		double ly = y[0];
 
@@ -542,7 +542,7 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		}
 	}
 
-	protected void plotLines(double[] x, double[] y, int[] c) {
+	protected void plotLines(final double[] x, final double[] y, final int[] c) {
 		double lx = x[0];
 		double ly = y[0];
 
@@ -553,21 +553,21 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		}
 	}
 
-	protected void plotPoint(double x, double y) {
+	protected void plotPoint(final double x, final double y) {
 		plotPoint((float) x, (float) y, getStrokeColor());
 	}
 
-	protected void plotPoints(double[] x, double[] y) {
+	protected void plotPoints(final double[] x, final double[] y) {
 		plotPoints(x, y, strokeColor);
 	}
 
-	protected void plotPoints(double[] x, double[] y, Color c) {
+	protected void plotPoints(final double[] x, final double[] y, final Color c) {
 		for (int i = 0; i < x.length; i++) {
 			plotPoint(x[i], y[i], c);
 		}
 	}
 
-	protected void plotPoints(double[] x, double[] y, int[] c) {
+	protected void plotPoints(final double[] x, final double[] y, final int[] c) {
 		for (int i = 0; i < x.length; i++) {
 			plotPoint(x[i], y[i], new Color(c[i]));
 		}
@@ -579,16 +579,17 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		updateAxes();
 	}
 
-	private void initAxis(Axis xa, Axis ya) {
+	private void initAxis(final Axis xa, final Axis ya) {
 		if (xa == null) {
-			xa = new Axis();
+			xAxis = new Axis();
+		} else {
+			xAxis = xa;
 		}
 		if (ya == null) {
-			ya = new Axis();
+			yAxis = new Axis();
+		} else {
+			yAxis = ya;
 		}
-
-		xAxis = xa;
-		yAxis = ya;
 	}
 
 	private float[] preLine(double x1, double y1, double x2, double y2) {
@@ -626,8 +627,8 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		}
 	}
 
-	private float trimX(double x) {
-		int mw = getMarginW() >> 1;
+	private float trimX(final double x) {
+		final int mw = getMarginW() >> 1;
 
 		if (x > getWidth() - mw) {
 			return getWidth() - mw;
@@ -640,8 +641,8 @@ public class Grapher2D extends DrawingSurface implements Grapher {
 		return (float) x;
 	}
 
-	private float trimY(double y) {
-		int mh = getMarginH() >> 1;
+	private float trimY(final double y) {
+		final int mh = getMarginH() >> 1;
 
 		if (y > getHeight() - mh) {
 			return getHeight() - mh;

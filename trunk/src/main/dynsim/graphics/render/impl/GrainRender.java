@@ -11,11 +11,9 @@ import java.awt.Color;
  */
 public class GrainRender extends DirectRenderer {
 
-	private float grain;
-
 	public GrainRender() {
 		super();
-		grain = 0.002f;
+		detail = 0.002f;
 	}
 
 	protected void procPixel(int x, int y, double dx, double dy, double dz) {
@@ -64,21 +62,21 @@ public class GrainRender extends DirectRenderer {
 			// }
 
 			// FIre
-			r += grain;
+			r += detail;
 
 			if (r > 0.9f) {
-				r -= grain;
-				g += grain;
+				r -= detail;
+				g += detail;
 
 				if (g > 0.9) {
-					g -= grain;
+					g -= detail;
 					if (r > 0.5)
-						r -= grain;
+						r -= detail;
 
 					if (b < 1) {
-						b += grain;
+						b += detail;
 						if (g > 0.5)
-							g -= grain;
+							g -= detail;
 					}
 
 					if (b > 1)
@@ -96,13 +94,5 @@ public class GrainRender extends DirectRenderer {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-	}
-
-	public float getGrain() {
-		return grain;
-	}
-
-	public void setGrain(float grain) {
-		this.grain = grain;
 	}
 }

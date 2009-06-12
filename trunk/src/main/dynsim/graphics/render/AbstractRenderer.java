@@ -54,6 +54,26 @@ public abstract class AbstractRenderer implements Renderer {
 	protected Color backgroundColor;
 
 	protected float detail;
+	
+	protected String filename;
+	
+	protected String directory;
+
+	public String getDirectory() {
+		return directory;
+	}
+
+	public void setDirectory(String directory) {
+		this.directory = directory;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
 
 	public void flush() throws DynSimException {
 		// TODO Auto-generated method stub
@@ -102,12 +122,12 @@ public abstract class AbstractRenderer implements Renderer {
 		// null impl
 	}
 
-	public void procResults(double[] holder) throws DynSimException {
-		double x = holder[getPosX()]; // x
-		double y = holder[getPosY()]; // y
+	public void procResults(final double[] holder) throws DynSimException {
+		final double x = holder[getPosX()]; // x
+		final double y = holder[getPosY()]; // y
 
 		if (has3D(holder, sim.getSystem())) {
-			double z = holder[getPosZ()]; // z
+			final double z = holder[getPosZ()]; // z
 
 			if (conf.isEnabled(RenderConfig.MODE_3D)) {
 				put3D(x, y, z);
@@ -129,14 +149,14 @@ public abstract class AbstractRenderer implements Renderer {
 	 * dynsim.graphics.render.Render#setAllAxisRanges(dynsim.graphics.render
 	 * .FloatRange)
 	 */
-	public void setAllAxisRanges(FloatRange ra) {
+	public void setAllAxisRanges(final FloatRange ra) {
 		setAxisRanges(ra, ra, ra);
 	}
 
 	public void setAutoAxisRanges() throws DynSimException {
-		FloatRange[] frs;
+		final FloatRange[] frs;
 
-		Simulator tmp = SimulatorFactory.createSimulator(sim.getSystem());
+		final Simulator tmp = SimulatorFactory.createSimulator(sim.getSystem());
 		frs = BoundsFinder.getBounds(tmp);
 		ax = frs[getPosX()];
 		ay = frs[getPosY()];
@@ -152,7 +172,7 @@ public abstract class AbstractRenderer implements Renderer {
 	 * dynsim.graphics.render.Render#setAxisRanges(dynsim.graphics.render.FloatRange
 	 * , dynsim.graphics.render.FloatRange)
 	 */
-	public void setAxisRanges(FloatRange ax, FloatRange ay) {
+	public void setAxisRanges(final FloatRange ax, final FloatRange ay) {
 		this.ax = ax;
 		this.ay = ay;
 	}
@@ -164,20 +184,20 @@ public abstract class AbstractRenderer implements Renderer {
 	 * dynsim.graphics.render.Render#setAxisRanges(dynsim.graphics.render.FloatRange
 	 * , dynsim.graphics.render.FloatRange, dynsim.graphics.render.FloatRange)
 	 */
-	public void setAxisRanges(FloatRange ax, FloatRange ay, FloatRange az) {
+	public void setAxisRanges(final FloatRange ax, final FloatRange ay, final FloatRange az) {
 		setAxisRanges(ax, ay);
 		this.az = az;
 	}
 
-	public void setBackgroundColor(Color backgroundColor) {
+	public void setBackgroundColor(final Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
-	public void setCamera(Camera cam) {
+	public void setCamera(final Camera cam) {
 		this.cam = cam;
 	}
 
-	public void setConfig(RenderConfig conf) {
+	public void setConfig(final RenderConfig conf) {
 		this.conf = conf;
 	}
 
@@ -187,37 +207,41 @@ public abstract class AbstractRenderer implements Renderer {
 		offset = 0f; // bright
 	}
 
+	public void reset() {
+		initImage();
+	}
+	
 	public void setDetail(float detail) {
 		this.detail = detail;
 	}
 
-	public void setDimensions(int w, int h, int d) {
+	public void setDimensions(final int w, final int h, final int d) {
 		this.w = w;
 		this.h = h;
 		this.d = d;
 	}
 
-	public void setEye(double x, double y, double z) {
+	public void setEye(final double x, final double y, final double z) {
 		cam.setEye(x, y, z);
 	}
 
-	public void setGamma(float gamma) {
+	public void setGamma(final float gamma) {
 		this.gamma = gamma;
 	}
 
-	public void setOffset(float offset) {
+	public void setOffset(final float offset) {
 		this.offset = offset;
 	}
 
-	public void setRotation(double yaw, double pitch, double roll) {
+	public void setRotation(final double yaw, final double pitch, final double roll) {
 		cam.setRotation(yaw, pitch, roll);
 	}
 
-	public void setScale(float scale) {
+	public void setScale(final float scale) {
 		this.scale = scale;
 	}
 
-	public void setSimulator(Simulator sim) {
+	public void setSimulator(final Simulator sim) {
 		this.sim = sim;
 
 		if (varPosIsNull()) {
@@ -227,11 +251,11 @@ public abstract class AbstractRenderer implements Renderer {
 
 	// TODO revisar
 	// si ode 1,2,3 otherwise 0,1,2
-	public void setVarpos(int[] varpos) {
+	public void setVarpos(final int[] varpos) {
 		this.varpos = varpos;
 	}
 
-	protected float clamp(float v) {
+	protected float clamp(final float v) {
 		return (v > 1) ? 1 : (v < 0) ? 0 : v;
 	}
 
@@ -242,7 +266,7 @@ public abstract class AbstractRenderer implements Renderer {
 	}
 
 	protected void drawBox() {
-		Graphics g = img.getGraphics();
+		final Graphics g = img.getGraphics();
 		g.setColor(new Color(255, 255, 255, 126));
 		int[] xy1, xy2, xy3, xy4;
 		xy1 = cam.worldToScreen(ax.getMin() * (w / (ax.getMax() - ax.getMin())), -ay.getMin()
@@ -266,7 +290,7 @@ public abstract class AbstractRenderer implements Renderer {
 
 	}
 
-	protected float expTransfer(float c, float factor) {
+	protected float expTransfer(final float c, final float factor) {
 		return (float) (1 - Math.exp(-factor * c));
 	}
 
@@ -284,7 +308,7 @@ public abstract class AbstractRenderer implements Renderer {
 
 	protected int[] getVarPosFromSim() {
 		int[] vp = new int[3];
-		DynamicalSystem sys = sim.getSystem();
+		final DynamicalSystem sys = sim.getSystem();
 
 		if (sys != null && sys.getTimeNature() == DynamicalSystem.CONTINOUS) {
 			vp[0] = 1;
@@ -312,11 +336,11 @@ public abstract class AbstractRenderer implements Renderer {
 		g.fillRect(0, 0, w, h);
 	}
 
-	protected float logTransfer(float c, float factor) {
+	protected float logTransfer(final float c, final float factor) {
 		return (float) Math.log(factor * c + 1);
 	}
 
-	protected boolean outOfBounds(int x, int y) {
+	protected boolean outOfBounds(final int x, final int y) {
 		if (x >= w || x < 0)
 			return true;
 		if (y >= h || y < 0)
@@ -325,14 +349,14 @@ public abstract class AbstractRenderer implements Renderer {
 		return false;
 	}
 
-	protected void procPixel(int x, int y, double dx, double dy, double dz) throws DynSimException {
+	protected void procPixel(final int x, final int y, final double dx, final double dy, final double dz) throws DynSimException {
 		// null imp.
 	}
 
-	protected void put2D(double dx, double dy) throws DynSimException {
-		int x = ScreenMap.toScreenInt(dx, w, ax.getMax(), ax.getMin());
+	protected void put2D(final double dx, final double dy) throws DynSimException {
+		final int x = ScreenMap.toScreenInt(dx, w, ax.getMax(), ax.getMin());
 		// int y = ScreenMap.toScr(dy, h, ay.getMax(), ay.getMin());
-		int y = ScreenMap.toScreenInt(dy, h, ay.getMin(), ay.getMax());
+		final int y = ScreenMap.toScreenInt(dy, h, ay.getMin(), ay.getMax());
 
 		if (isOverflow(x, y, 0))
 			return; // skip
@@ -340,10 +364,10 @@ public abstract class AbstractRenderer implements Renderer {
 		procPixel(x, y, dx, dy, 0);
 	}
 
-	protected void put3D(double dx, double dy, double dz) throws DynSimException {
+	protected void put3D(final double dx, final double dy, final double dz) throws DynSimException {
 		int x, y;
 
-		int[] xy = worldToScreen(dx, dy, dz);
+		final int[] xy = worldToScreen(dx, dy, dz);
 
 		x = xy[0];
 		y = xy[1];
@@ -354,7 +378,7 @@ public abstract class AbstractRenderer implements Renderer {
 		procPixel(x, y, dx, dy, dz);
 	}
 
-	protected void putPx(int x, int y, float r, float g, float b) {
+	protected void putPx(final int x, final int y, float r, float g, float b) {
 		if (notIdentityGamma()) {
 			r = (float) (scale * Math.pow(r, 1f / gamma) + offset);
 			g = (float) (scale * Math.pow(g, 1f / gamma) + offset);
@@ -365,7 +389,7 @@ public abstract class AbstractRenderer implements Renderer {
 		g = clamp(g);
 		b = clamp(b);
 
-		Color c = new Color(r, g, b);
+		final Color c = new Color(r, g, b);
 
 		img.setRGB(x, y, c.getRGB());
 	}
@@ -386,16 +410,17 @@ public abstract class AbstractRenderer implements Renderer {
 		return cam.worldToScreen(x, y, z);
 	}
 
-	protected int[] worldToScreen(double[] xyz) {
+	protected int[] worldToScreen(final double[] xyz) {
 		return worldToScreen(xyz[0], xyz[1], xyz[2]);
 	}
 
-	protected void writeToDisk(String fname, String ext, String dir) throws IOException {
-		File f = File.createTempFile(fname, "." + ext, new File(dir));
+	protected void writeToDisk(final String fname, final String ext, final String dir) throws IOException {
+//		final File f = File.createTempFile(fname, "." + ext, new File(dir));
+		final File f = new File(dir+"/"+fname+"."+ext);
 		ImageIO.write(img, ext, f);
 	}
 
-	private void drawAxis(String label, Color color, int x, int y, int z) {
+	private void drawAxis(final String label, final Color color, final int x, final int y, final int z) {
 		int[] xy = this.cam.worldToScreen(0, 0, 0);
 		int x1 = xy[0];
 		int y1 = xy[1];
@@ -420,7 +445,7 @@ public abstract class AbstractRenderer implements Renderer {
 		g.drawLine(x1, y1, x2, y2);
 	}
 
-	private boolean has3D(double[] holder, DynamicalSystem sys) {
+	private boolean has3D(final double[] holder, final DynamicalSystem sys) {
 		return ((sys.getTimeNature() == DynamicalSystem.CONTINOUS && holder.length > 3) || (sys.getTimeNature() == DynamicalSystem.DISCRETE && holder.length > 2));
 	}
 
@@ -430,7 +455,7 @@ public abstract class AbstractRenderer implements Renderer {
 	 * @param z
 	 * @return
 	 */
-	private boolean isOverflow(double x, double y, double z) {
+	private boolean isOverflow(final double x, final double y, final double z) {
 		if (x >= w || x < 0)
 			return true;
 		if (y >= h || y < 0)

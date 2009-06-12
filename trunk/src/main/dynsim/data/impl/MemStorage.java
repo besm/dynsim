@@ -7,7 +7,7 @@ public class MemStorage extends AbstractStorage {
 
 	private double[][] datum;
 
-	public MemStorage(double[][] results, String[] names) {
+	public MemStorage(final double[][] results, final String[] names) {
 		super(names);
 		datum = results;
 		currentRowIndex = 0;
@@ -19,7 +19,7 @@ public class MemStorage extends AbstractStorage {
 	 * 
 	 * @see dynsim.simulator.ResultsData#get(int)
 	 */
-	public double[] getAll(int i) {
+	public double[] getAll(final int i) {
 		return datum[i];
 	}
 
@@ -28,7 +28,7 @@ public class MemStorage extends AbstractStorage {
 	 * 
 	 * @see dynsim.simulator.ResultsData#add(double[])
 	 */
-	public void add(double[] holder) {
+	public void add(final double[] holder) {
 		if (currentRowIndex > getAvailableRows()) {
 			growArray();
 		}
@@ -41,7 +41,7 @@ public class MemStorage extends AbstractStorage {
 		currentRowIndex++;
 	}
 
-	public void setData(double[][] data) {
+	public void setData(final double[][] data) {
 		this.datum = data;
 	}
 
@@ -57,17 +57,17 @@ public class MemStorage extends AbstractStorage {
 	}
 
 	private void growArray() {
-		double[][] resL = new double[currentRowIndex][datum[0].length + GROW_SIZE];
+		final double[][] resL = new double[currentRowIndex][datum[0].length + GROW_SIZE];
 		for (int i = 0; i < currentRowIndex; i++)
 			System.arraycopy(datum[i], 0, resL[i], 0, datum[0].length);
 		datum = resL;
 	}
 
-	public double get(int c, int r) {
+	public double get(final int c, final int r) {
 		return datum[c][r];
 	}
 
-	public void put(int c, int r, double v) {
+	public void put(final int c, final int r, final double v) {
 		datum[c][r] = v;
 		notifyValue(c, v);
 	}

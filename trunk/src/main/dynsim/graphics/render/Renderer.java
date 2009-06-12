@@ -66,4 +66,10 @@ public interface Renderer extends ResultProcessor {
 	public abstract void setBackgroundColor(Color bg);
 
 	public abstract Color getBackgroundColor();
+
+	public abstract void setDirectory(String string);
+
+	public abstract void setFilename(String string);
+
+	public abstract void reset();
 }

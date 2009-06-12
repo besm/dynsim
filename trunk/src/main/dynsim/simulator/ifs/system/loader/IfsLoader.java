@@ -48,7 +48,7 @@ public class IfsLoader {
 		smap.put(key, value);
 	}
 
-	public Map getIfsMap() {
+	public Map<String, IfsDatum> getIfsMap() {
 		return smap;
 	}
 
