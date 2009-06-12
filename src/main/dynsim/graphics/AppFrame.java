@@ -33,10 +33,10 @@ public class AppFrame extends Frame {
 	}
 
 	public void center() {
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frame = getSize();
-		int x = (screen.width - frame.width) / 2;
-		int y = (screen.height - frame.height) / 2;
+		final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		final Dimension frame = getSize();
+		final int x = (screen.width - frame.width) / 2;
+		final int y = (screen.height - frame.height) / 2;
 
 		setLocation(x, y);
 	}

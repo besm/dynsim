@@ -22,27 +22,27 @@ import dynsim.data.AbstractStorage;
 public class BerkeleyDBStorage extends AbstractStorage {
 	private static final String DB_NAME = "db1";
 
-	private Environment env = null;
+	private Environment env;
 
-	private Database db = null;
+	private Database db;
 
-	private Logger log = Logger.getLogger(BerkeleyDBStorage.class.getName());
+	private final Logger log = Logger.getLogger(BerkeleyDBStorage.class.getName());
 
-	public BerkeleyDBStorage(String[] names) {
+	public BerkeleyDBStorage(final String[] names) {
 		this(DB_NAME, names);
 	}
 
 	// Tener en cuenta si se llama dos veces para la misma
 	// db .--- tema de init!
-	public BerkeleyDBStorage(String dbName, String[] names) {
+	public BerkeleyDBStorage(final String dbName, final String[] names) {
 		super(names);
-		EnvironmentConfig econf = new EnvironmentConfig();
+		final EnvironmentConfig econf = new EnvironmentConfig();
 		econf.setAllowCreate(true);
 		econf.setLocking(false);
 		// TODO rowsnum
 		try {
 			env = new Environment(new File("data/test/dbEnv"), econf);
-			DatabaseConfig dbConfig = new DatabaseConfig();
+			final DatabaseConfig dbConfig = new DatabaseConfig();
 			// dbConfig.setSortedDuplicates(true);
 			dbConfig.setAllowCreate(true);
 
@@ -60,9 +60,9 @@ public class BerkeleyDBStorage extends AbstractStorage {
 			for (int i = 0; i < holder.length; i++) {
 				key = "K" + i + currentRowIndex;
 				k = new DatabaseEntry(key.getBytes("UTF-8"));
-				DatabaseEntry v = new DatabaseEntry();
+				final DatabaseEntry v = new DatabaseEntry();
 
-				EntryBinding dbind = TupleBinding.getPrimitiveBinding(Double.class);
+				final EntryBinding dbind = TupleBinding.getPrimitiveBinding(Double.class);
 				dbind.objectToEntry(new Double(holder[i]), v);
 
 				db.put(null, k, v);
@@ -83,12 +83,12 @@ public class BerkeleyDBStorage extends AbstractStorage {
 	public double get(int c, int r) {
 		try {
 			String key = "K" + c + r;
-			DatabaseEntry k = new DatabaseEntry(key.getBytes("UTF-8"));
-			DatabaseEntry v = new DatabaseEntry();
+			final DatabaseEntry k = new DatabaseEntry(key.getBytes("UTF-8"));
+			final DatabaseEntry v = new DatabaseEntry();
 
 			if ((db.get(null, k, v, LockMode.DEFAULT) == OperationStatus.SUCCESS)) {
-				byte[] retData = v.getData();
-				double foundData = Double.longBitsToDouble(new BigInteger(retData).longValue());
+				final byte[] retData = v.getData();
+				final double foundData = Double.longBitsToDouble(new BigInteger(retData).longValue());
 
 				return foundData;
 			} else {
@@ -103,7 +103,7 @@ public class BerkeleyDBStorage extends AbstractStorage {
 
 	public void remove() {
 		try {
-			String name = db.getDatabaseName();
+			final String name = db.getDatabaseName();
 			db.close();
 			env.removeDatabase(null, name);
 			env.close();
@@ -118,9 +118,9 @@ public class BerkeleyDBStorage extends AbstractStorage {
 		try {
 			k = new DatabaseEntry(key.getBytes("UTF-8"));
 
-			DatabaseEntry v = new DatabaseEntry();
+			final DatabaseEntry v = new DatabaseEntry();
 
-			EntryBinding dbind = TupleBinding.getPrimitiveBinding(Double.class);
+			final EntryBinding dbind = TupleBinding.getPrimitiveBinding(Double.class);
 			dbind.objectToEntry(new Double(value), v);
 
 			db.put(null, k, v);

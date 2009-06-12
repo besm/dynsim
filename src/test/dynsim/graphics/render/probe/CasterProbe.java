@@ -7,6 +7,8 @@ import dynsim.exceptions.DynSimException;
 import dynsim.graphics.AppFrame;
 import dynsim.graphics.render.Renderer;
 import dynsim.graphics.render.impl.CasterRenderer;
+import dynsim.graphics.render.impl.DensityRenderer;
+import dynsim.graphics.render.impl.GrainRender;
 import dynsim.graphics.render.util.DisplayImage;
 import dynsim.simulator.Simulator;
 import dynsim.simulator.SimulatorFactory;
@@ -63,22 +65,29 @@ public class CasterProbe extends AppFrame {
 		// rend.setVarpos(new int[] { 1, 3, 2 });
 		// rend.setRotation(0f, 0f, 0.25f);
 
-		// rend.setGamma(1.25f);
-		// rend.setScale(1.5f);
+//		 rend.setGamma(1.25f);
+//		 rend.setScale(1.5f);
 
 		// rend.setGamma(0.75f);
 		// rend.setScale(1f);
 		// rend.setDetail(0.005f);
+		
+//		 rend.setGamma(1.25f);
+//		 rend.setScale(1.5f);
+//		rend.setDetail(0.015f);
+		
 		rend.setDetail(0.015f);
 
+		// detail 0.015f
+		
 		test();
 		rend.flush();
 	}
 
 	public void test() throws DynSimException {
 		dyn.setSkip(10000);
-		// dyn.setItersMax(2000000);
-		dyn.setItersMax(10000000);
+		dyn.setItersMax(5000000);
+//		dyn.setItersMax(10000000);
 
 		dyn.compute();
 

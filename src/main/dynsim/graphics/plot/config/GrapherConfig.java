@@ -15,7 +15,7 @@ public abstract class GrapherConfig extends Configuration {
 
 	private static final long serialVersionUID = -2380992430697758823L;
 
-	private Map<String, String> map;
+	private final Map<String, String> map;
 
 	private float lineWeight;
 

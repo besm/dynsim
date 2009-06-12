@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DataSlotList {
-	private List<DataSlot> slots;
+	private final List<DataSlot> slots;
 
 	private DataSlot current;
 
@@ -13,19 +13,19 @@ public class DataSlotList {
 		slots = new ArrayList<DataSlot>();
 	}
 
-	public void addStorage(Storage data) {
+	public void addStorage(final Storage data) {
 		DataSlot slot = new DataSlot(data);
 		addDataSlot(slot);
 	}
 
-	public void addDataSlot(DataSlot slot) {
+	public void addDataSlot(final DataSlot slot) {
 		slots.add(slot);
 		if (!hasCurrentSlot()) {
 			setCurrentSlot(slot);
 		}
 	}
 
-	public void removeDataSlot(DataSlot slot) {
+	public void removeDataSlot(final DataSlot slot) {
 		slots.remove(slot);
 	}
 
@@ -41,7 +41,7 @@ public class DataSlotList {
 		return slots.size() > 1;
 	}
 
-	public void setCurrentSlot(DataSlot slot) {
+	public void setCurrentSlot(final DataSlot slot) {
 		current = slot;
 	}
 

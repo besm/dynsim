@@ -7,13 +7,13 @@ public class Palette {
 
 	int palSize;
 
-	private int[] palette;
+	private final int[] palette;
 
-	public Palette(float hmn, float hmx) {
+	public Palette(final float hmn, final float hmx) {
 		this(hmn, hmx, DEFAULT_SIZE);
 	}
 
-	public Palette(float hmn, float hmx, int siz) {
+	public Palette(final float hmn, final float hmx, final int siz) {
 		palSize = siz;
 		palette = new int[palSize];
 
@@ -58,8 +58,9 @@ public class Palette {
 		return palette[c];
 	}
 
-	public void makePalette(float hmn, float hmx, float smn, float smx, float vmn, float vmx, int[] pal) {
-		float ft = 1.0f / palSize;
+	public void makePalette(final float hmn, final float hmx, float smn, final float smx, final float vmn,
+			final float vmx, final int[] pal) {
+		final float ft = 1.0f / palSize;
 
 		float hue = 0, sat = 0, val = 0;
 
@@ -80,7 +81,7 @@ public class Palette {
 		}
 	}
 
-	public void makePalette(float pfue, float pfsv, int[] pal) {
+	public void makePalette(final float pfue, final float pfsv, final int[] pal) {
 		System.out.println("making palette");
 
 		float fhue = pfue / palSize; // 0.4f 0.3 0.35f hue ok 0.15-2
@@ -132,7 +133,7 @@ public class Palette {
 		return palSize;
 	}
 
-	public void setPalSize(int palSize) {
+	public void setPalSize(final int palSize) {
 		this.palSize = palSize;
 	}
 }

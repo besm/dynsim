@@ -15,7 +15,7 @@ public class DataSlot {
 
 	private Storage data;
 
-	public DataSlot(Storage data) {
+	public DataSlot(final Storage data) {
 		this.data = data;
 	}
 
@@ -31,7 +31,7 @@ public class DataSlot {
 		return data;
 	}
 
-	public void setData(Storage data) {
+	public void setData(final Storage data) {
 		this.data = data;
 	}
 
@@ -39,7 +39,7 @@ public class DataSlot {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
@@ -63,7 +63,7 @@ public class DataSlot {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(final Color color) {
 		this.color = color;
 	}
 

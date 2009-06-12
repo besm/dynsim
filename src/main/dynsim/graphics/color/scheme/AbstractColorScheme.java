@@ -11,9 +11,9 @@ import dynsim.graphics.color.LinearRamp;
  * 
  */
 public abstract class AbstractColorScheme implements ColorScheme {
-	protected ColorRamp fader;
+	protected final ColorRamp fader;
 
-	public AbstractColorScheme(ColorRamp fader) {
+	public AbstractColorScheme(final ColorRamp fader) {
 		this.fader = fader;
 	}
 

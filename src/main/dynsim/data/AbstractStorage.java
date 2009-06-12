@@ -16,7 +16,7 @@ public abstract class AbstractStorage implements Storage {
 
 	private boolean minmax;
 
-	public AbstractStorage(String[] names) {
+	public AbstractStorage(final String[] names) {
 		columnNames = names;
 		colsNum = names.length;
 		currentRowIndex = 0;
@@ -27,7 +27,7 @@ public abstract class AbstractStorage implements Storage {
 		minmax = false;
 	}
 
-	protected int resolveName(String name) {
+	protected int resolveName(final String name) {
 		for (int i = 0; i < columnNames.length; i++) {
 			if (columnNames[i].equalsIgnoreCase(name)) {
 				return i;
@@ -36,7 +36,7 @@ public abstract class AbstractStorage implements Storage {
 		return 0;
 	}
 
-	protected void notifyValue(int c, double v) {
+	protected void notifyValue(final int c, final double v) {
 		minmax = true;
 
 		if (max[c] < v) {
@@ -47,7 +47,7 @@ public abstract class AbstractStorage implements Storage {
 		}
 	}
 
-	public void setColumnNames(String[] names) {
+	public void setColumnNames(final String[] names) {
 		this.columnNames = names;
 	}
 
@@ -67,11 +67,11 @@ public abstract class AbstractStorage implements Storage {
 		return rowsNum;
 	}
 
-	public double[] getAll(String name) {
+	public double[] getAll(final String name) {
 		return getAll(resolveName(name));
 	}
 
-	public double[] getAllForRow(int r) {
+	public double[] getAllForRow(final int r) {
 		double[] ret = new double[getColumnsNum()];
 		for (int i = 0; i < ret.length; i++) {
 			ret[i] = get(i, r);

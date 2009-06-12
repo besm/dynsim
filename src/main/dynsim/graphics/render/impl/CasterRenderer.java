@@ -20,14 +20,13 @@ import dynsim.graphics.render.util.FloatRange;
 import dynsim.math.vector.Vector3D;
 
 public class CasterRenderer extends AbstractRenderer {
-
 	private static final int B = 2;
 
 	private static final int G = 1;
 
 	private static final int R = 0;
 
-	Sample[][] points;
+	private final Sample[][] points;
 
 	float maxz;
 
@@ -46,13 +45,16 @@ public class CasterRenderer extends AbstractRenderer {
 
 	private float ka;
 
-	private List<Light> lights;
+	private final List<Light> lights;
 
 	private Vector3D V;
 
 	private Shader shader;
 
 	public CasterRenderer() {
+		filename = "casterend";
+		directory = "data/images";
+		
 		setDimensions(400, 400, 400);
 
 		conf = new RenderConfig(RenderConfig.MODE_3D);
@@ -91,14 +93,14 @@ public class CasterRenderer extends AbstractRenderer {
 		// ambient = new float[] { 0.35f, 0.15f, 0.f };
 
 		// Light key = new Light(-5, -25, 35);
-		Light key = new Light(-5, 25, -35);
+		final Light key = new Light(-5, 25, -35);
 		// key.setConfig(Light.OMNI);
 
-		Light fill = new Light(10, -25, -45);
+		final Light fill = new Light(10, -25, -45);
 		// Light fill = new Light(10, -25, -45);
 		fill.setConfig(Light.NO_SPEC);
 
-		Light rim = new Light(0, 25, 0);
+		final Light rim = new Light(0, 25, 0);
 		rim.setConfig(Light.RIM);
 
 		// Material material = new Material();
@@ -110,15 +112,15 @@ public class CasterRenderer extends AbstractRenderer {
 		// material.kd = 0.8f;
 		// material.kr = 0.15f;
 
-		Material material = new Material();
+		final Material material = new Material();
 		// 0.23f, 0.37f, 0.8f
 		// material.setDiffuseColor(0.42f, 0.54f, 0.42f);
 		// material.setDiffuseColor(0.84f, 0.94f, 0.84f);
 		// 139,123,139
-		material.setDiffuseColor(0.54f, 0.35f, 0.f);
-		material.setSpecularColor(1f, 1f, 0.95f);
-		material.setRoughness(0.1f);
-		material.ks = 0.9f;
+		material.setDiffuseColor(0.7f, 0.5f, 0.f);
+		material.setSpecularColor(0.8f, 0.8f, 0.5f);
+		material.setRoughness(0.75f);
+		material.ks = 0.8f;
 		material.kd = 0.05f;
 		material.kr = 1f;
 		// material.setRoughness(0.75f);
@@ -128,10 +130,16 @@ public class CasterRenderer extends AbstractRenderer {
 		key.setIntensity(0.8f, 0.8f, 0.8f);
 		key.setMaterial(material);
 
+		material.setDiffuseColor(0.5f, 0.3f, 0.f);
+		material.setSpecularColor(0.85f, 0.6f, 0.f);
+		material.setRoughness(0.75f);
+		material.ks = 0.8f;
+		material.kd = 0.05f;
+		material.kr = 1f;
 		fill.setIntensity(0.25f, 0.25f, 0.25f);
 		fill.setMaterial(material);
 
-		Material m = new Material();
+		final Material m = new Material();
 		m.setDiffuseColor(0.0f, 0.35f, 0.54f);
 		m.setSpecularColor(1f, 1f, 1f);
 		m.setRoughness(0.1f);
@@ -159,12 +167,12 @@ public class CasterRenderer extends AbstractRenderer {
 
 	private void illumination(int x, int y, double dx, double dy, double dz, Vector3D N) {
 
-		float alpha = detail * ((float) (1f - N.getZ()));
+		final float alpha = detail * ((float) (1f - N.getZ()));
 
-		Iterator<Light> il = lights.iterator();
-		float[] I = new float[3];
+		final Iterator<Light> il = lights.iterator();
+		final float[] I = new float[3];
 
-		Vector3D P = new Vector3D(dx, dy, dz);
+		final Vector3D P = new Vector3D(dx, dy, dz);
 
 		while (il.hasNext()) {
 			Light lit = il.next();
@@ -198,7 +206,7 @@ public class CasterRenderer extends AbstractRenderer {
 
 		float fz = movePositive((float) dz);
 
-		Vector3D N = fwDiff(dx, dy, dz); // updates ox,oy..
+		final Vector3D N = fwDiff(dx, dy, dz); // updates ox,oy..
 
 		if (points[x][y] == null) {
 			points[x][y] = new Sample(fz);
@@ -276,7 +284,7 @@ public class CasterRenderer extends AbstractRenderer {
 
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				Sample cs = points[x][y];
+				final Sample cs = points[x][y];
 
 				if (cs == null || Float.isNaN(cs.z)) {
 					continue;
@@ -302,11 +310,11 @@ public class CasterRenderer extends AbstractRenderer {
 
 	protected void onEndRaster() {
 		if (conf.isEnabled(RenderConfig.DRAW_REFS)) {
-			Iterator<Light> lits = lights.iterator();
+			final Iterator<Light> lits = lights.iterator();
 			while (lits.hasNext()) {
-				Light l = lits.next();
-				Vector3D p = l.getOrigPosition();
-				Material m = l.getMaterial();
+				final Light l = lits.next();
+				final Vector3D p = l.getOrigPosition();
+				final Material m = l.getMaterial();
 				Color c = Color.GREEN;
 				if (l.isEnabled(Light.NO_SPEC)) {
 					c = new Color(m.Id[0], m.Id[1], m.Id[2]);
@@ -381,7 +389,7 @@ public class CasterRenderer extends AbstractRenderer {
 
 	public void flush() throws DynSimException {
 		try {
-			writeToDisk("casterend", "png", "data/images");
+			writeToDisk(filename, "png", directory);
 		} catch (IOException e) {
 			throw new DynSimException("Error flushing to disk", e);
 		}
@@ -451,23 +459,19 @@ public class CasterRenderer extends AbstractRenderer {
 		g.fillRect(x1, y1, 5, 5);
 	}
 
-	public void setView(Vector3D view) {
+	public void setView(final Vector3D view) {
 		this.V = view;
 	}
 
-	public void addLight(Light l) {
+	public void addLight(final Light l) {
 		lights.add(l);
-	}
-
-	public void setLights(List<Light> l) {
-		lights = l;
 	}
 
 	public List<Light> getLights() {
 		return lights;
 	}
 
-	public void setAmbient(float ka, float[] rgb) {
+	public void setAmbient(final float ka, final float[] rgb) {
 		this.ka = ka;
 		this.ambient = rgb;
 	}

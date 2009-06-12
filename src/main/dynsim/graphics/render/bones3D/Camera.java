@@ -20,9 +20,9 @@ public class Camera {
 
 	double tanthetah, tanthetav;
 
-	static double DTOR = 0.01745329252;
+	static final double DTOR = 0.01745329252;
 
-	static double EPSILON = 0.001;
+	static final double EPSILON = 0.001;
 
 	// Vector3D from;
 	// Vector3D to;

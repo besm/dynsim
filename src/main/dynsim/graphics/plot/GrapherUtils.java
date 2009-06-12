@@ -5,7 +5,7 @@ import dynsim.graphics.plot.config.GrapherConfig;
 
 public class GrapherUtils {
 
-	public static void loadPart3Array(int pnum, double[] x, double[] y, int b, double[] ct) {
+	public static void loadPart3Array(final int pnum, final double[] x, final double[] y, final int b, final double[] ct) {
 		for (int j = 0, k = 0; j < ct.length; j += 3, k++) {
 			if (pnum > 0 && k == 0) {
 				ct[j] = x[b - 1];
@@ -24,10 +24,11 @@ public class GrapherUtils {
 		}
 	}
 
-	public static int loadPart(Grapher grapher, int parts, int b, double[] tmpx, double[] tmpy, int i) {
+	public static int loadPart(final Grapher grapher, final int parts, final int b, final double[] tmpx,
+			final double[] tmpy, int i) {
 
-		Storage data = grapher.getCurrentData();
-		GrapherConfig config = grapher.getGrapherConfig();
+		final Storage data = grapher.getCurrentData();
+		final GrapherConfig config = grapher.getGrapherConfig();
 
 		if (parts > 0 && i == 0) {
 			tmpx[i] = data.get(config.getPlotVarX(), b - 1);

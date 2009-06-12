@@ -18,17 +18,17 @@ public class BaseShader implements Shader {
 	private BufferedImage txt;
 
 	public BaseShader() {
-		txt = null;
-		try {
-			txt = ImageIO.read(new File("data/images/text11.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		txt = null;
+//		try {
+//			txt = ImageIO.read(new File("data/images/text11.png"));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	public float[] shade(Light lit, Vector3D P, Vector3D N, Vector3D V) {
-		return shiny(lit, P, N, V);
+		return plastic(lit, P, N, V);
 	}
 
 	protected float[] plastic2(Light lit, Vector3D P, Vector3D N, Vector3D V) {

@@ -5,7 +5,14 @@ import dynsim.simulator.ode.system.AbstractOdeSystem;
 
 public class Crispy extends AbstractOdeSystem {
 	// private double a = 0.22, b = -3.32;
-	private double a = 0.35, b = -3.35;// b = -3.35;
+//	private double a = 9.599075, b = -3;
+	// 9.5 -2.2
+	// 9.5 -3
+	// a = 9.6, b = -3
+	
+//	private double a = 0.22, b = -3.33;
+	
+	// a= 0.35 b = -3.35;
 	// private double a = 9.99, b = -3.1100000011;
 	// private double a = 0.25, b = -3.75;
 
@@ -26,6 +33,10 @@ public class Crispy extends AbstractOdeSystem {
 	// a = 0.22, b = -4.33..40 [4.2..4.44<- homocli
 	// a = 0.22, b = -4.438210580020000239999
 
+	public static final String PARAM_B = "b";
+
+	public static final String PARAM_A = "a";
+
 	private fx fx;
 
 	private fy fy;
@@ -33,6 +44,9 @@ public class Crispy extends AbstractOdeSystem {
 	private fz fz;
 
 	public Crispy() {
+		setParameter(PARAM_A, 0.15);
+		setParameter(PARAM_B, -3.33);
+		
 		setInitialCondition("x", 0);
 		setInitialCondition("y", 0);
 		setInitialCondition("z", 0);
@@ -111,7 +125,7 @@ public class Crispy extends AbstractOdeSystem {
 			double y = vars[1];
 			double z = vars[2];
 
-			return Math.cos(z) + a * (y - x);
+			return Math.cos(z) + getParameter(PARAM_A) * (y - x);
 		}
 	}
 
@@ -120,7 +134,7 @@ public class Crispy extends AbstractOdeSystem {
 			double x = vars[0];
 			double z = vars[2];
 
-			return (a - z) * Math.sin(z) + b * x;
+			return (getParameter(PARAM_A) - z) * Math.sin(z) + getParameter(PARAM_B) * x;
 		}
 	}
 
@@ -128,7 +142,7 @@ public class Crispy extends AbstractOdeSystem {
 		public double eval(double[] vars) {
 			double x = vars[0];
 			double y = vars[1];
-			return a + (2 * x - y);
+			return getParameter(PARAM_A) + (2 * x - y);
 		}
 	}
 }

@@ -108,7 +108,7 @@ public class RK5 extends AbstractIntegrator {
 	 * @param target
 	 *            calling class
 	 */
-	public RK5(OdeSystem target) {
+	public RK5(final OdeSystem target) {
 
 		sys = target;
 		dim = sys.getIndependentVarsNum();

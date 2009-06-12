@@ -10,36 +10,36 @@ import Jama.Matrix;
  * 
  */
 public class ColorConverter {
-	static Matrix YCC = new Matrix(new double[][] { { 0.2989, 0.5866, 0.1145 }, { -0.1687, -0.3312, 0.5000 },
+	static final  Matrix YCC = new Matrix(new double[][] { { 0.2989, 0.5866, 0.1145 }, { -0.1687, -0.3312, 0.5000 },
 			{ 0.5000, 0.4183, 0.0816 } });
 
-	static Matrix iYCC = new Matrix(new double[][] { { 1.0, 0.0, 1.4022 }, { 1.0, -0.3456, -0.7145 },
+	static final  Matrix iYCC = new Matrix(new double[][] { { 1.0, 0.0, 1.4022 }, { 1.0, -0.3456, -0.7145 },
 			{ 1.0, 1.7710, 0.0 } });
 
-	public static float[] RGBtoYCC(float[] rgb) {
+	public static float[] RGBtoYCC(final float[] rgb) {
 		return matToFloatArr(YCC.times(floatArrToMat(rgb)));
 	}
 
-	private static Matrix floatArrToMat(float[] rgb) {
+	private static Matrix floatArrToMat(final float[] rgb) {
 		return new Matrix(new double[][] { { rgb[0] }, { rgb[1] }, { rgb[2] } });
 	}
 
-	public static float[] YCCtoRGB(float[] rgb) {
+	public static float[] YCCtoRGB(final float[] rgb) {
 		return matToFloatArr(iYCC.times(floatArrToMat(rgb)));
 	}
 
-	private static float[] matToFloatArr(Matrix mc) {
+	private static float[] matToFloatArr(final Matrix mc) {
 		return new float[] { (float) mc.get(0, 0), (float) mc.get(1, 0), (float) mc.get(2, 0) };
 	}
 
-	public static float[] HSVtoRGB(float h, float s, float v) {
+	public static float[] HSVtoRGB(final float h, final float s, final float v) {
 		// H is given on [0->6] or -1. S and V are given on [0->1].
 		// RGB are each returned on [0->1].
 		float m, n, f;
 		int i;
 
-		float[] hsv = new float[3];
-		float[] rgb = new float[3];
+		final float[] hsv = new float[3];
+		final float[] rgb = new float[3];
 
 		hsv[0] = h;
 		hsv[1] = s;
