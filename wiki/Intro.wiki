@@ -1,0 +1,9 @@
+#Introducción y ejemplos de uso.
+
+= Introducción =
+
+Dynsim es un framework 100% java para la simulación y el análisis de sistemas dinámicos, especialmente no lineales.
+
+
+= Ejemplos visuales =
+
