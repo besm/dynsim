@@ -10,11 +10,11 @@ import dynsim.math.numeric.function.RealFunction;
 import dynsim.simulator.Parameters;
 
 public abstract class AbstractDynamicalSystem implements DynamicalSystem {
-	protected Parameters params;
+	protected final Parameters params;
 
-	protected Parameters initConditions;
+	protected final Parameters initConditions;
 
-	protected Collection<RealFunction> funcs;
+	protected final Collection<RealFunction> funcs;
 
 	private int type;
 
@@ -25,9 +25,32 @@ public abstract class AbstractDynamicalSystem implements DynamicalSystem {
 		type = DynamicalSystem.UNKNOWN_T;
 	}
 
+	public void addFunction(RealFunction f) {
+		funcs.add(f);
+	}
+
+	public Collection<RealFunction> getFunctions() {
+		return funcs;
+	}
+
+	public double[] getGradient(final double[] point) {
+		final Iterator<RealFunction> itor = funcs.iterator();
+		final int nvars = getIndepVarsNumNoTime();
+		final double[] g = new double[nvars];
+		final Ridders diffmethod = new Ridders();
+		int i = 0;
+		while (itor.hasNext()) {
+			final RealFunction f = itor.next();
+			g[i] = diffmethod.compute(f, point, i, 0.15, 10);
+			i++;
+		}
+
+		return g;
+	}
+
 	public String[] getIndependentVarNames() {
-		Collection<String> tmp = initConditions.getLabels();
-		String[] res = new String[tmp.size()];
+		final Collection<String> tmp = initConditions.getLabels();
+		final String[] res = new String[tmp.size()];
 		return tmp.toArray(res);
 	}
 
@@ -39,15 +62,34 @@ public abstract class AbstractDynamicalSystem implements DynamicalSystem {
 		return getIndependentVarsNum();
 	}
 
-	public double[] getInitialValues() {
-		return initConditions.getValuesAsArray();
-	}
-
 	public Parameters getInitialConditions() {
 		return initConditions;
 	}
 
-	public double getParameter(String name) {
+	public double[] getInitialValues() {
+		return initConditions.getValuesAsArray();
+	}
+
+	public Matrix getJacobianMatrix(final double[] point) {
+		final Iterator<RealFunction> itor = funcs.iterator();
+		final int nvars = getIndepVarsNumNoTime();
+		final Ridders diffmethod = new Ridders();
+
+		final double[][] jacobian = new double[nvars][funcs.size()];
+		int fi = 0;
+
+		while (itor.hasNext()) {
+			final RealFunction f = itor.next();
+			for (int i = 0; i < nvars; i++) {
+				jacobian[i][fi] = diffmethod.compute(f, point, i, 0.15, 10);
+			}
+			fi++;
+		}
+
+		return new Matrix(jacobian);
+	}
+
+	public double getParameter(final String name) {
 		return params.getValue(name);
 	}
 
@@ -55,24 +97,12 @@ public abstract class AbstractDynamicalSystem implements DynamicalSystem {
 		return params;
 	}
 
-	public void setParameters(Parameters params) {
-		this.params = params;
-	}
-
-	public void setInitialCondition(String label, double value) {
-		initConditions.put(label, value);
-	}
-
-	public void setParameter(String label, double value) {
-		params.put(label, value);
-	}
-
-	public void addFunction(RealFunction f) {
-		funcs.add(f);
+	public int getType() {
+		return type;
 	}
 
 	public int getVarPosition(String name) {
-		Iterator<String> tmp = initConditions.getLabels().iterator();
+		final Iterator<String> tmp = initConditions.getLabels().iterator();
 
 		int p = 0;
 		while (tmp.hasNext()) {
@@ -85,50 +115,30 @@ public abstract class AbstractDynamicalSystem implements DynamicalSystem {
 		return -1;
 	}
 
-	public Collection<RealFunction> getFunctions() {
-		return funcs;
+	@Override
+	public void resetInitialConditions() {
+		initConditions.clear();
 	}
 
-	public double[] getGradient(double[] point) {
-		Iterator<RealFunction> itor = funcs.iterator();
-		int nvars = getIndepVarsNumNoTime();
-		double[] g = new double[nvars];
-		Ridders diffmethod = new Ridders();
-		int i = 0;
-		while (itor.hasNext()) {
-			RealFunction f = itor.next();
-			g[i] = diffmethod.compute(f, point, i, 0.15, 10);
-			i++;
-		}
-
-		return g;
+	@Override
+	public void resetParameters() {
+		params.clear();
 	}
 
-	public Matrix getJacobianMatrix(double[] point) {
-		Iterator<RealFunction> itor = funcs.iterator();
-		int nvars = getIndepVarsNumNoTime();
-		Ridders diffmethod = new Ridders();
-
-		double[][] jacobian = new double[nvars][funcs.size()];
-		int fi = 0;
-
-		while (itor.hasNext()) {
-			RealFunction f = itor.next();
-			for (int i = 0; i < nvars; i++) {
-				jacobian[i][fi] = diffmethod.compute(f, point, i, 0.15, 10);
-			}
-			fi++;
-		}
-
-		return new Matrix(jacobian);
+	public void setInitialCondition(final String label, final double value) {
+		initConditions.put(label, value);
 	}
 
-	public void setInitialConditions(double[] conds) {
+	public void setInitialConditions(final double[] conds) {
 		initConditions.putAll(conds);
 	}
 
-	public int getType() {
-		return type;
+	public void setParameter(String label, double value) {
+		params.put(label, value);
+	}
+
+	public void setParameters(Parameters params) {
+		this.params.putAll(params);
 	}
 
 	public void setType(int type) {

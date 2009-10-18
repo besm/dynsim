@@ -6,22 +6,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Parameters {
-	private Map<String, Double> params;
+	private final Map<String, Double> params;
 
 	public Parameters() {
 		params = new LinkedHashMap<String, Double>();
 	}
 
-	public double getValue(String key) {
-		double r = 0;
-		r = params.get(key);
-		return r;
-	}
-
-	public double getValue(int index) {
-		double r = 0;
-		r = params.get(index);
-		return r;
+	public void clear() {
+		params.clear();
 	}
 
 	public Collection<String> getLabels() {
@@ -32,12 +24,16 @@ public class Parameters {
 		return params;
 	}
 
-	public void put(String label, double value) {
-		params.put(label, value);
+	public double getValue(int index) {
+		double r = 0;
+		r = params.get(index);
+		return r;
 	}
 
-	public void putAll(Parameters p) {
-		params.putAll(p.getParameters());
+	public double getValue(String key) {
+		double r = 0;
+		r = params.get(key);
+		return r;
 	}
 
 	public Collection<Double> getValues() {
@@ -45,8 +41,8 @@ public class Parameters {
 	}
 
 	public double[] getValuesAsArray() {
-		double[] r = new double[params.size()];
-		Iterator it = params.values().iterator();
+		final double[] r = new double[params.size()];
+		final Iterator<Double> it = params.values().iterator();
 		int i = 0;
 		while (it.hasNext()) {
 			r[i] = ((Double) it.next()).doubleValue();
@@ -55,12 +51,8 @@ public class Parameters {
 		return r;
 	}
 
-	public int size() {
-		return params.size();
-	}
-
-	public String toString() {
-		return params.toString();
+	public void put(String label, double value) {
+		params.put(label, value);
 	}
 
 	public void putAll(double[] conds) {
@@ -71,5 +63,21 @@ public class Parameters {
 			String key = it.next();
 			params.put(key, conds[cn++]);
 		}
+	}
+
+	public void putAll(Parameters p) {
+		params.putAll(p.getParameters());
+	}
+
+	public void remove(String key) {
+		params.remove(key);
+	}
+
+	public int size() {
+		return params.size();
+	}
+
+	public String toString() {
+		return params.toString();
 	}
 }

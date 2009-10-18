@@ -40,6 +40,13 @@ public class RecurrencePlot implements Computable {
 
 	private int dim;
 
+	private RQA rqa;
+
+	public RecurrencePlot(Storage state, String[] names) {
+		this(state, names, null);
+		unsetMode(PLOT);
+	}
+
 	public RecurrencePlot(Storage state, String[] names, RecurrencePlotDelegate delegate) {
 		this.inStor = state;
 		this.rowsNum = state.getRowsNum();
@@ -127,7 +134,8 @@ public class RecurrencePlot implements Computable {
 		if (isEnabled(QANALYSIS) && !alreadyComputed) {
 			System.out.println("Max dist: " + maxDist);
 
-			System.out.println(new RQA(allpoints, CRds, CLds, maxDiag, minLineLength));
+			rqa = new RQA(allpoints, CRds, CLds, maxDiag, minLineLength);
+			System.out.println(rqa);
 		}
 
 		alreadyComputed = true;
@@ -174,6 +182,10 @@ public class RecurrencePlot implements Computable {
 
 	public void setThreshold(double eps) {
 		this.threshold = eps;
+	}
+
+	public RQA getRQA() {
+		return rqa;
 	}
 
 	public double getThreshold() {
