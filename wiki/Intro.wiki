@@ -30,9 +30,10 @@ http://dynsim.googlecode.com/svn/wiki/images/ghhgd02.gif
 
 == Recurrence plots ==
 
-http://dynsim.googlecode.com/svn/wiki/images/rqa41570.jpg
-http://dynsim.googlecode.com/svn/wiki/images/rqa10116.jpg
-http://dynsim.googlecode.com/svn/wiki/images/rqa26317.jpg
+http://dynsim.googlecode.com/svn/wiki/images/rqa41570.png
+http://dynsim.googlecode.com/svn/wiki/images/rqa10116.png
+http://dynsim.googlecode.com/svn/wiki/images/rqa26317.png
+http://dynsim.googlecode.com/svn/wiki/images/rqa48010.png
 
 == Simple plots ==
 
