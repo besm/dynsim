@@ -7,6 +7,8 @@ Dynsim es un framework 100% java para la simulación y el análisis de sistemas 
 
 = Renders =
 
+== Phase space HQ ==
+
 http://dynsim.googlecode.com/svn/wiki/images/st002.gif
 http://dynsim.googlecode.com/svn/wiki/images/casterend62495.gif
 http://dynsim.googlecode.com/svn/wiki/images/casterend65214.gif
@@ -21,6 +23,18 @@ http://dynsim.googlecode.com/svn/wiki/images/flow04.gif
 http://dynsim.googlecode.com/svn/wiki/images/flow09.gif
 http://dynsim.googlecode.com/svn/wiki/images/flow08.gif
 http://dynsim.googlecode.com/svn/wiki/images/crawl02.gif
+http://dynsim.googlecode.com/svn/wiki/images/CHA000.png
 http://dynsim.googlecode.com/svn/wiki/images/casterend44227.png
 http://dynsim.googlecode.com/svn/wiki/images/circa.gif
 http://dynsim.googlecode.com/svn/wiki/images/ghhgd02.gif
+
+== Recurrence plots ==
+
+http://dynsim.googlecode.com/svn/wiki/images/rqa41570.jpg
+http://dynsim.googlecode.com/svn/wiki/images/rqa10116.jpg
+http://dynsim.googlecode.com/svn/wiki/images/rqa26317.jpg
+
+== Simple plots ==
+
+http://dynsim.googlecode.com/svn/wiki/images/sa10.PNG
+http://dynsim.googlecode.com/svn/wiki/images/sa09.PNG
