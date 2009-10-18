@@ -2,10 +2,6 @@ package dynsim.graphics.render.shaders;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import dynsim.graphics.render.light.Light;
 import dynsim.graphics.render.light.Material;
@@ -13,42 +9,9 @@ import dynsim.math.vector.Vector3D;
 import dynsim.math.vector.VectorN;
 import dynsim.math.vector.VectorOps;
 
-public class BaseShader implements Shader {
+public abstract class BaseShader implements Shader {
 
 	private BufferedImage txt;
-
-	public BaseShader() {
-//		txt = null;
-//		try {
-//			txt = ImageIO.read(new File("data/images/text11.png"));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	}
-
-	public float[] shade(Light lit, Vector3D P, Vector3D N, Vector3D V) {
-		return plastic(lit, P, N, V);
-	}
-
-	protected float[] plastic2(Light lit, Vector3D P, Vector3D N, Vector3D V) {
-		Material mat = lit.getMaterial();
-		Vector3D L = lit.getPosition(P);
-
-		float[] d = mixDiff(mat, lambertDiffuse(L, N));
-
-		float[] s = new float[] { 0, 0, 0 };
-
-		if (lit.isDisabled(Light.NO_SPEC)) {
-			s = mixSpec(mat, phongSpecular(L, N, getViewPosition(P, V), 1f / mat.roughness));
-		}
-
-		float[] c = lit.getIntensity();
-
-		float att = lit.getAttenuation(P);
-
-		return mix(d, s, c, att);
-	}
 
 	public float[] rim(Light lit, Vector3D P, Vector3D N, Vector3D V) {
 		Material mat = lit.getMaterial();
@@ -63,6 +26,81 @@ public class BaseShader implements Shader {
 		float att = lit.getAttenuation(P);
 
 		return mix(d, s, c, att);
+	}
+
+	public float[] rim(final ShaderContext context) {
+		return rim(context.getLight(), context.getPoint(), context.getNormal(), context.getViewer());
+	}
+
+	public float[] shade(Light lit, Vector3D P, Vector3D N, Vector3D V) {
+		return glossy(lit, P, N, V);
+	}
+
+	public float[] shade(final ShaderContext context) {
+		return shade(context.getLight(), context.getPoint(), context.getNormal(), context.getViewer());
+	}
+
+	protected float beckmannSpec(Vector3D L, Vector3D N, Vector3D V, float m) {
+		VectorN H = (VectorN) VectorOps.add(L, V);
+		H.normalize();
+
+		float NH = (float) VectorOps.dot(N, H);
+
+		float c = (float) (1f / (4 * (m * m) * Math.pow(NH, 4)));
+
+		float mtan = (float) Math.tan(Math.acos(NH)) / m;
+		mtan *= mtan;
+		mtan = (float) Math.exp(-mtan);
+
+		return c * mtan;
+	}
+
+	protected float gaussianSpec(Vector3D L, Vector3D N, Vector3D V, float m) {
+		VectorN H = (VectorN) VectorOps.add(L, V);
+		H.normalize();
+
+		float NH = (float) VectorOps.dot(N, H);
+		float mangl = (float) (Math.acos(NH) / m);
+		mangl *= mangl;
+		mangl = (float) Math.exp(-mangl);
+		return (float) mangl;
+	}
+
+	protected Vector3D getViewPosition(Vector3D P, Vector3D V) {
+		Vector3D VP = new Vector3D(V);
+		VP.substract(P);
+		VP.normalize();
+		return VP;
+	}
+
+	protected float[] glossy(Light lit, Vector3D P, Vector3D N, Vector3D V) {
+		Material mat = lit.getMaterial();
+
+		Vector3D L = lit.getPosition(P);
+
+		float[] d = mixDiff(mat, lambertDiffuse(N, L));
+
+		float[] s = new float[] { 0, 0, 0 };
+
+		if (lit.isDisabled(Light.NO_SPEC)) {
+			s = mixSpec(mat, glossySpec(L, N, getViewPosition(P, V), (1f / mat.roughness) / 10f, 0.15f));
+		}
+
+		float[] c = lit.getIntensity();
+
+		float att = lit.getAttenuation(P);
+
+		return mix(d, s, c, att);
+	}
+
+	protected float glossySpec(Vector3D L, Vector3D N, Vector3D V, float roughness, float sharpness) {
+		VectorN H = (VectorN) VectorOps.add(L, V);
+		H.normalize();
+
+		float NH = (float) VectorOps.dot(N, H);
+
+		float w = .18f * (1 - sharpness);
+		return smoothstep(0.72f - w, 0.72f + w, (float) Math.pow(Math.max(0, NH), roughness));
 	}
 
 	protected float[] grazingSpecular(Light lit, Vector3D P, Vector3D N, Vector3D V, float backscatter) {
@@ -106,6 +144,10 @@ public class BaseShader implements Shader {
 		return spec;
 	}
 
+	protected float lambertDiffuse(Vector3D L, Vector3D N) {
+		return (float) VectorOps.dot(N, L);
+	}
+
 	protected float[] matte(Light lit, Vector3D P, Vector3D N, Vector3D V) {
 		Material mat = lit.getMaterial();
 		Vector3D L = lit.getPosition(P);
@@ -123,6 +165,34 @@ public class BaseShader implements Shader {
 
 		float fkt = 1 - fkr;
 		return mix(d, s, c, fkt * att);
+	}
+
+	protected float[] mix(float[] d, float[] s, float[] c, float att) {
+		return new float[] { att * (c[0] * (d[0] + s[0])), att * (c[1] * (d[1] + s[1])), att * (c[2] * (d[2] + s[2])) };
+	}
+
+	protected float[] mixDiff(Material mat, float d) {
+		return new float[] { mat.kd * (mat.Id[0] * d), mat.kd * (mat.Id[1] * d), mat.kd * (mat.Id[2] * d) };
+	}
+
+	protected float[] mixSpec(Material mat, float spec) {
+		return new float[] { mat.ks * (mat.Is[0] * spec), mat.ks * (mat.Is[1] * spec), mat.ks * (mat.Is[2] * spec) };
+	}
+
+	protected float phongNHSpecular(Vector3D L, Vector3D N, Vector3D V, float roughness) {
+		VectorN H = (VectorN) VectorOps.add(L, V);
+		H.normalize();
+
+		float NH = (float) VectorOps.dot(N, H);
+		return (float) Math.pow(Math.max(0, NH), roughness);
+	}
+
+	protected float phongSpecular(Vector3D L, Vector3D N, Vector3D V, float roughness) {
+		Vector3D rRay = new Vector3D(N);
+		rRay.substract(L);
+		rRay.multiply(2 * VectorOps.dot(N, L));
+
+		return (float) Math.pow(Math.max(0, VectorOps.dot(rRay, V)), roughness);
 	}
 
 	protected float[] shiny(Light lit, Vector3D P, Vector3D N, Vector3D V) {
@@ -173,6 +243,19 @@ public class BaseShader implements Shader {
 		return res;
 	}
 
+	protected float smoothstep(float e1, float e2, float x) {
+		float interval, x2, y;
+
+		if (x < e1)
+			return 0.0f;
+		if (x > e2)
+			return 1.0f;
+		interval = Math.abs(e2 - e1);
+		x2 = (x - e1) / interval;
+		y = (x2 * x2) * (3 - (2 * x2));
+		return y;
+	}
+
 	protected float[] thinPlastic(Light lit, Vector3D P, Vector3D N, Vector3D V) {
 		Material mat = lit.getMaterial();
 		Vector3D L = lit.getPosition(P);
@@ -187,26 +270,6 @@ public class BaseShader implements Shader {
 
 		if (lit.isDisabled(Light.NO_SPEC)) {
 			s = mixSpec(mat, phongNHSpecular(L, N, getViewPosition(P, V), 1f / mat.roughness));
-		}
-
-		float[] c = lit.getIntensity();
-
-		float att = lit.getAttenuation(P);
-
-		return mix(d, s, c, att);
-	}
-
-	protected float[] glossy(Light lit, Vector3D P, Vector3D N, Vector3D V) {
-		Material mat = lit.getMaterial();
-
-		Vector3D L = lit.getPosition(P);
-
-		float[] d = mixDiff(mat, lambertDiffuse(N, L));
-
-		float[] s = new float[] { 0, 0, 0 };
-
-		if (lit.isDisabled(Light.NO_SPEC)) {
-			s = mixSpec(mat, glossySpec(L, N, getViewPosition(P, V), (1f / mat.roughness) / 10f, 0.15f));
 		}
 
 		float[] c = lit.getIntensity();
@@ -249,44 +312,8 @@ public class BaseShader implements Shader {
 		return mix(d, s, c, att);
 	}
 
-	protected float[] plastic(Light lit, Vector3D P, Vector3D N, Vector3D V) {
-		Material mat = lit.getMaterial();
-
-		Vector3D L = lit.getPosition(P);
-
-		float[] d = mixDiff(mat, lambertDiffuse(L, N));
-
-		float[] s = new float[] { 0, 0, 0 };
-
-		if (lit.isDisabled(Light.NO_SPEC)) {
-			s = mixSpec(mat, phongNHSpecular(L, N, getViewPosition(P, V), 1f / mat.roughness));
-		}
-
-		float[] c = lit.getIntensity();
-
-		float att = lit.getAttenuation(P);
-
-		return mix(d, s, c, att);
-	}
-
-	protected float lambertDiffuse(Vector3D L, Vector3D N) {
-		return (float) VectorOps.dot(N, L);
-	}
-
-	protected float phongNHSpecular(Vector3D L, Vector3D N, Vector3D V, float roughness) {
-		VectorN H = (VectorN) VectorOps.add(L, V);
-		H.normalize();
-
-		float NH = (float) VectorOps.dot(N, H);
-		return (float) Math.pow(Math.max(0, NH), roughness);
-	}
-
-	private float phongSpecular(Vector3D L, Vector3D N, Vector3D V, float roughness) {
-		Vector3D rRay = new Vector3D(N);
-		rRay.substract(L);
-		rRay.multiply(2 * VectorOps.dot(N, L));
-
-		return (float) Math.pow(Math.max(0, VectorOps.dot(rRay, V)), roughness);
+	private float blend(float src, float dest, float alpha) {
+		return (float) (((1 - alpha) * src) + (alpha * dest));
 	}
 
 	private float fresnel(Vector3D L, Vector3D N, Vector3D V, float kr) {
@@ -325,77 +352,5 @@ public class BaseShader implements Shader {
 		}
 
 		return fkr;
-	}
-
-	protected float glossySpec(Vector3D L, Vector3D N, Vector3D V, float roughness, float sharpness) {
-		VectorN H = (VectorN) VectorOps.add(L, V);
-		H.normalize();
-
-		float NH = (float) VectorOps.dot(N, H);
-
-		float w = .18f * (1 - sharpness);
-		return smoothstep(0.72f - w, 0.72f + w, (float) Math.pow(Math.max(0, NH), roughness));
-	}
-
-	protected float gaussianSpec(Vector3D L, Vector3D N, Vector3D V, float m) {
-		VectorN H = (VectorN) VectorOps.add(L, V);
-		H.normalize();
-
-		float NH = (float) VectorOps.dot(N, H);
-		float mangl = (float) (Math.acos(NH) / m);
-		mangl *= mangl;
-		mangl = (float) Math.exp(-mangl);
-		return (float) mangl;
-	}
-
-	protected float beckmannSpec(Vector3D L, Vector3D N, Vector3D V, float m) {
-		VectorN H = (VectorN) VectorOps.add(L, V);
-		H.normalize();
-
-		float NH = (float) VectorOps.dot(N, H);
-
-		float c = (float) (1f / (4 * (m * m) * Math.pow(NH, 4)));
-
-		float mtan = (float) Math.tan(Math.acos(NH)) / m;
-		mtan *= mtan;
-		mtan = (float) Math.exp(-mtan);
-
-		return c * mtan;
-	}
-
-	protected float[] mix(float[] d, float[] s, float[] c, float att) {
-		return new float[] { att * (c[0] * (d[0] + s[0])), att * (c[1] * (d[1] + s[1])), att * (c[2] * (d[2] + s[2])) };
-	}
-
-	protected float[] mixSpec(Material mat, float spec) {
-		return new float[] { mat.ks * (mat.Is[0] * spec), mat.ks * (mat.Is[1] * spec), mat.ks * (mat.Is[2] * spec) };
-	}
-
-	protected float[] mixDiff(Material mat, float d) {
-		return new float[] { mat.kd * (mat.Id[0] * d), mat.kd * (mat.Id[1] * d), mat.kd * (mat.Id[2] * d) };
-	}
-
-	protected float smoothstep(float e1, float e2, float x) {
-		float interval, x2, y;
-
-		if (x < e1)
-			return 0.0f;
-		if (x > e2)
-			return 1.0f;
-		interval = Math.abs(e2 - e1);
-		x2 = (x - e1) / interval;
-		y = (x2 * x2) * (3 - (2 * x2));
-		return y;
-	}
-
-	private float blend(float src, float dest, float alpha) {
-		return (float) (((1 - alpha) * src) + (alpha * dest));
-	}
-
-	private Vector3D getViewPosition(Vector3D P, Vector3D V) {
-		Vector3D VP = new Vector3D(V);
-		VP.substract(P);
-		VP.normalize();
-		return VP;
 	}
 }

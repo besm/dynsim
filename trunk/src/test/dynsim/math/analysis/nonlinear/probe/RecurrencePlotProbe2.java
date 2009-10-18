@@ -50,9 +50,11 @@ public class RecurrencePlotProbe2 extends AppFrame {
 	}
 
 	public void sim() throws DynSimException {
-		OdeSystem sys = new Ueda();
+		OdeSystem sys = new Chua();
 		OdeSimulator sim = new OdeSimulator(sys);
 
+		sys.setParameter("a", 15.8);
+		
 		sim.setSkip(2000);
 		sim.setItersMax(4000);
 		sim.compute();

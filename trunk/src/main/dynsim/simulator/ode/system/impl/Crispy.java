@@ -5,13 +5,13 @@ import dynsim.simulator.ode.system.AbstractOdeSystem;
 
 public class Crispy extends AbstractOdeSystem {
 	// private double a = 0.22, b = -3.32;
-//	private double a = 9.599075, b = -3;
+	// private double a = 9.599075, b = -3;
 	// 9.5 -2.2
 	// 9.5 -3
 	// a = 9.6, b = -3
-	
-//	private double a = 0.22, b = -3.33;
-	
+
+	// private double a = 0.22, b = -3.33;
+
 	// a= 0.35 b = -3.35;
 	// private double a = 9.99, b = -3.1100000011;
 	// private double a = 0.25, b = -3.75;
@@ -44,9 +44,12 @@ public class Crispy extends AbstractOdeSystem {
 	private fz fz;
 
 	public Crispy() {
-		setParameter(PARAM_A, 0.15);
-		setParameter(PARAM_B, -3.33);
-		
+		// setParameter(PARAM_A, 0.15);
+		// setParameter(PARAM_B, -3.33);
+
+		setParameter(PARAM_A, 3.5);
+		setParameter(PARAM_B, -0.55);
+
 		setInitialCondition("x", 0);
 		setInitialCondition("y", 0);
 		setInitialCondition("z", 0);
@@ -59,7 +62,7 @@ public class Crispy extends AbstractOdeSystem {
 		addFunction(fz);
 	}
 
-	// NOTA más lento que Math.sin
+	// NOTA mï¿½s lento que Math.sin
 	// /*
 	// * sin x = x - x3/3! + x5/5! - x7/7! + . . .
 	// * cos x = 1 - x2/2! + x4/4! -

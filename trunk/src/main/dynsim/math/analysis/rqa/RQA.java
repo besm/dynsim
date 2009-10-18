@@ -92,6 +92,42 @@ public class RQA {
 		return h;
 	}
 
+	public int getMinLineLen() {
+		return minLineLen;
+	}
+
+	public double getPctDeterminism() {
+		return pctDeterminism;
+	}
+
+	public double getPctRecurrence() {
+		return pctRecurrence;
+	}
+
+	public int getNumRecPoints() {
+		return numRecPoints;
+	}
+
+	public int getTotalPoints() {
+		return totalPoints;
+	}
+
+	public int getNumDiags() {
+		return numDiags;
+	}
+
+	public double getRatio() {
+		return ratio;
+	}
+
+	public int getMaxDiag() {
+		return maxDiag;
+	}
+
+	public float getEntropy() {
+		return entropy;
+	}
+
 	@Override
 	public String toString() {
 		String r = "[RQA] (" + minLineLen + ")";

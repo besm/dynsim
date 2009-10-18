@@ -15,6 +15,7 @@ import dynsim.graphics.render.bones3D.Camera;
 import dynsim.graphics.render.light.Light;
 import dynsim.graphics.render.light.Material;
 import dynsim.graphics.render.shaders.BaseShader;
+import dynsim.graphics.render.shaders.PlasticShader;
 import dynsim.graphics.render.shaders.Shader;
 import dynsim.graphics.render.util.FloatRange;
 import dynsim.math.vector.Vector3D;
@@ -49,12 +50,12 @@ public class CasterRenderer extends AbstractRenderer {
 
 	private Vector3D V;
 
-	private Shader shader;
+	private final Shader shader;
 
 	public CasterRenderer() {
 		filename = "casterend";
 		directory = "data/images";
-		
+
 		setDimensions(400, 400, 400);
 
 		conf = new RenderConfig(RenderConfig.MODE_3D);
@@ -81,7 +82,7 @@ public class CasterRenderer extends AbstractRenderer {
 
 		defaultLights();
 
-		shader = new BaseShader();
+		shader = new PlasticShader();
 	}
 
 	private void defaultLights() {
@@ -117,21 +118,21 @@ public class CasterRenderer extends AbstractRenderer {
 		// material.setDiffuseColor(0.42f, 0.54f, 0.42f);
 		// material.setDiffuseColor(0.84f, 0.94f, 0.84f);
 		// 139,123,139
-		material.setDiffuseColor(0.7f, 0.5f, 0.f);
-		material.setSpecularColor(0.8f, 0.8f, 0.5f);
+		material.setDiffuseColor(1f, 1f, 1f);
+		material.setSpecularColor(1f, 1f, 1f);
 		material.setRoughness(0.75f);
-		material.ks = 0.8f;
+		material.ks = 1f;
 		material.kd = 0.05f;
 		material.kr = 1f;
 		// material.setRoughness(0.75f);
 		// material.ks = 0.8f;
 		// material.kd = 0.05f;
 
-		key.setIntensity(0.8f, 0.8f, 0.8f);
+		key.setIntensity(0.95f, 0.8f, 0.8f);
 		key.setMaterial(material);
 
 		material.setDiffuseColor(0.5f, 0.3f, 0.f);
-		material.setSpecularColor(0.85f, 0.6f, 0.f);
+		material.setSpecularColor(0.95f, 0.6f, 0.f);
 		material.setRoughness(0.75f);
 		material.ks = 0.8f;
 		material.kd = 0.05f;

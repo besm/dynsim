@@ -7,7 +7,7 @@ public class Chua extends AbstractOdeSystem {
 	// critical gamma = 60.81
 	// 23
 	// private double alpha = 15.6, beta = 1, gamma = 23.5181;
-	private double alpha = 15.6, beta = 1, gamma = 31.15;
+	// private double alpha = 15.6, beta = 1, gamma = 31.15;
 	// gamma 31...34
 
 	// 23.4-5
@@ -26,6 +26,10 @@ public class Chua extends AbstractOdeSystem {
 		setInitialCondition("x", 1);
 		setInitialCondition("y", 0.2);
 		setInitialCondition("z", 0);
+
+		setParameter("a", 15.6);
+		setParameter("b", 1);
+		setParameter("c", 31.15);
 
 		fx = new fx();
 		fy = new fy();
@@ -64,6 +68,7 @@ public class Chua extends AbstractOdeSystem {
 			double x = vars[0];
 			double y = vars[1];
 			// double z = vars[2];
+			double alpha = getParameter("a");
 
 			return alpha * (y - x - f(x));
 		}
@@ -74,6 +79,7 @@ public class Chua extends AbstractOdeSystem {
 			double x = vars[0];
 			double y = vars[1];
 			double z = vars[2];
+			double beta = getParameter("b");
 
 			return beta * (x - y + z);
 		}
@@ -84,6 +90,7 @@ public class Chua extends AbstractOdeSystem {
 			// double x = vars[0];
 			double y = vars[1];
 			// double z = vars[2];
+			double gamma = getParameter("c");
 
 			return -gamma * y;
 		}
