@@ -22,6 +22,7 @@ public class DisplayImage extends Component {
 	public DisplayImage(int width, int height) {
 		pw = width;
 		ph = height;
+		img = new BufferedImage(pw, ph, BufferedImage.TYPE_INT_RGB);
 	}
 
 	public BufferedImage getImg() {

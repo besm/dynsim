@@ -6,9 +6,9 @@ package dynsim.graphics.plot.j2d.probe;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.color.scheme.impl.Rainbow;
 import dynsim.graphics.color.scheme.impl.Warm;
+import dynsim.ui.AppFrame;
 
 /**
  * @author maf83

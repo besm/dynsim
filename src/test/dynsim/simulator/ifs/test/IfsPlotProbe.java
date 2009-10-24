@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.j2d.Grapher2D;
 import dynsim.simulator.Simulator;
 import dynsim.simulator.SimulatorFactory;
@@ -13,6 +12,7 @@ import dynsim.simulator.ifs.system.filter.Swirl;
 import dynsim.simulator.ifs.system.impl.StochasticFilteredIfs;
 import dynsim.simulator.ifs.system.loader.IfsDatum;
 import dynsim.simulator.ifs.system.loader.IfsLoader;
+import dynsim.ui.AppFrame;
 
 public class IfsPlotProbe extends AppFrame {
 	private static final long serialVersionUID = -8339107382776469057L;

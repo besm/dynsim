@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 
 import dynsim.data.Storage;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.color.scheme.impl.Warm;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
@@ -15,6 +14,7 @@ import dynsim.simulator.color.MultirampColors;
 import dynsim.simulator.ode.OdeSimulator;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.Rossler;
+import dynsim.ui.AppFrame;
 
 /**
  * @author maf83

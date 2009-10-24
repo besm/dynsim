@@ -6,13 +6,13 @@ import java.awt.Color;
 
 import dynsim.data.Storage;
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.j2d.Grapher2D;
 import dynsim.math.analysis.DelayEmbedding;
 import dynsim.simulator.ode.OdeSimulator;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.*;
+import dynsim.ui.AppFrame;
 
 public class EmbeddingProbe extends AppFrame {
 	private static final long serialVersionUID = -8339107382776469057L;
@@ -66,7 +66,7 @@ public class EmbeddingProbe extends AppFrame {
 		// (values,dim[2,3,4..n],roll[4,10,15,25..150])
 		Storage res = DelayEmbedding.embed(ts, 2, 50);
 
-		// TODO no funciona la estimación
+		// TODO no funciona la estimaciï¿½n
 		System.out.println(DelayEmbedding.estimateDimension(ts, 25));
 
 		GrapherConfig conf = graph.getGrapherConfig();

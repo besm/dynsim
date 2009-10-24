@@ -7,7 +7,6 @@ import java.util.Random;
 import dynsim.data.Storage;
 import dynsim.data.impl.BetterMemStorage;
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
@@ -19,6 +18,7 @@ import dynsim.simulator.SimulatorFactory;
 import dynsim.simulator.iteratedmap.system.impl.*;
 import dynsim.simulator.ode.system.impl.*;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class FrequencyBasicsProbe extends AppFrame {
 

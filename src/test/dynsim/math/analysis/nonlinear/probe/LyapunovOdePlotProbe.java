@@ -6,7 +6,6 @@ import java.awt.Color;
 
 import dynsim.data.Storage;
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
@@ -16,6 +15,7 @@ import dynsim.simulator.Simulator;
 import dynsim.simulator.SimulatorFactory;
 import dynsim.simulator.ode.system.impl.Lorentz;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class LyapunovOdePlotProbe extends AppFrame {
 	private static final long serialVersionUID = -4871969491316656883L;

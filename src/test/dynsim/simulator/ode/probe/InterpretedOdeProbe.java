@@ -5,7 +5,6 @@ import java.awt.Button;
 
 import dynsim.data.Storage;
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.j2d.Grapher2D;
 import dynsim.simulator.Simulator;
@@ -13,6 +12,7 @@ import dynsim.simulator.SimulatorFactory;
 import dynsim.simulator.color.MultirampColors;
 import dynsim.simulator.ode.system.impl.interp.InterpretedOde;
 import dynsim.simulator.system.interp.ParserWrapper;
+import dynsim.ui.AppFrame;
 import edu.hws.jcm.data.Variable;
 
 public class InterpretedOdeProbe extends AppFrame {

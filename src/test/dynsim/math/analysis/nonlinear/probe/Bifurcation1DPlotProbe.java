@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
 
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.axis.Axis;
@@ -12,6 +11,7 @@ import dynsim.math.analysis.global.BifurcationDiagram1D;
 import dynsim.math.analysis.global.BifurcationPlot;
 import dynsim.simulator.iteratedmap.system.impl.*;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class Bifurcation1DPlotProbe extends AppFrame {
 	private static final long serialVersionUID = -4871969491316656883L;
@@ -68,7 +68,7 @@ public class Bifurcation1DPlotProbe extends AppFrame {
 		// orbit.setParameterName("a");
 		// orbit.setParameterRange(-5, 0);
 		// // orbit.setWarm(1500);
-		// // con warm resolución más baja 1500warm=>100
+		// // con warm resoluciï¿½n mï¿½s baja 1500warm=>100
 		// orbit.setResolution(500);
 		// // orbit.setMinPeriod(2);
 		// orbit.setMaxPeriod(8);

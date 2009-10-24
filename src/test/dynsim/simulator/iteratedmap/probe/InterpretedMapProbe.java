@@ -7,13 +7,13 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.j2d.Grapher2D;
 import dynsim.simulator.Simulator;
 import dynsim.simulator.SimulatorFactory;
 import dynsim.simulator.iteratedmap.system.impl.interp.InterpretedMap;
 import dynsim.simulator.system.interp.ParserWrapper;
+import dynsim.ui.AppFrame;
 import edu.hws.jcm.data.Variable;
 
 /**
