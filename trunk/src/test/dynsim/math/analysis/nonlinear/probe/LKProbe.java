@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
 import dynsim.math.analysis.DelayEmbedding;
@@ -13,6 +12,7 @@ import dynsim.simulator.Simulator;
 import dynsim.simulator.SimulatorFactory;
 import dynsim.simulator.ode.system.impl.*;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class LKProbe extends AppFrame {
 	private static final long serialVersionUID = 4767016572007481541L;

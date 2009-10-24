@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.axis.Axis;
@@ -12,6 +11,7 @@ import dynsim.math.analysis.rqa.ColorRecurrencePlot;
 import dynsim.simulator.ode.OdeSimulator;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.*;
+import dynsim.ui.AppFrame;
 
 public class RecurrencePlotProbe2 extends AppFrame {
 	private static final long serialVersionUID = -8339107382776469057L;

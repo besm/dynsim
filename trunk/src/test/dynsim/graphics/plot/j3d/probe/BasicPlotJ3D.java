@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import dynsim.data.Storage;
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.color.scheme.impl.Warm;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig3D;
@@ -16,6 +15,7 @@ import dynsim.simulator.color.MultirampColors;
 import dynsim.simulator.ode.OdeSimulator;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.*;
+import dynsim.ui.AppFrame;
 
 public class BasicPlotJ3D extends AppFrame {
 	private static final long serialVersionUID = 6320505559597728945L;

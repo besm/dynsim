@@ -3,8 +3,8 @@ package dynsim.graphics.plot.j2d.probe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.DrawingSurface;
+import dynsim.ui.AppFrame;
 
 public class SurfaceProbe extends AppFrame {
 	private static final long serialVersionUID = 8646311124969347700L;

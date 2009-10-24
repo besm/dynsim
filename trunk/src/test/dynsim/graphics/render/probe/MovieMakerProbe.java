@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.render.Renderer;
 import dynsim.graphics.render.impl.CasterRenderer;
 import dynsim.graphics.render.util.DisplayImage;
@@ -13,6 +12,7 @@ import dynsim.simulator.Simulator;
 import dynsim.simulator.SimulatorFactory;
 import dynsim.simulator.ode.system.impl.Crispy;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class MovieMakerProbe extends AppFrame {
 	private static final long serialVersionUID = -4767399338932470546L;

@@ -5,7 +5,6 @@ import java.awt.Color;
 
 import dynsim.data.Storage;
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.math.analysis.DelayEmbedding;
@@ -17,6 +16,7 @@ import dynsim.simulator.ode.OdeSimulator;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.*;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class RecurrencePlotProbe extends AppFrame {
 	private static final long serialVersionUID = -8339107382776469057L;
@@ -58,7 +58,7 @@ public class RecurrencePlotProbe extends AppFrame {
 		IteratedMap sys = new MikeCell();
 		IteratedMapSimulator sim = new IteratedMapSimulator(sys);
 		// posiciones de la historia...t vs t
-		// TODO ver como se relaciona con el tamaño del plot
+		// TODO ver como se relaciona con el tamaï¿½o del plot
 		sim.setSkip(7000);
 		sim.setItersMax(9000);
 

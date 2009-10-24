@@ -6,7 +6,6 @@ import java.awt.Color;
 
 import dynsim.data.Storage;
 import dynsim.data.impl.BetterMemStorage;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
@@ -14,6 +13,7 @@ import dynsim.graphics.plot.j2d.axis.Axis;
 import dynsim.math.analysis.global.LyapunovPlot;
 import dynsim.simulator.iteratedmap.system.impl.*;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class LyapunovPlotProbe extends AppFrame {
 	private static final long serialVersionUID = -4871969491316656883L;

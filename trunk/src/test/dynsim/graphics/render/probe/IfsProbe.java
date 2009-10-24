@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.render.RenderConfig;
 import dynsim.graphics.render.impl.DensityRenderer;
 import dynsim.graphics.render.util.DisplayImage;
@@ -19,6 +18,7 @@ import dynsim.simulator.ifs.system.IteratedFunctionSystem;
 import dynsim.simulator.ifs.system.impl.StochasticIfs;
 import dynsim.simulator.ifs.system.loader.IfsDatum;
 import dynsim.simulator.ifs.system.loader.IfsLoader;
+import dynsim.ui.AppFrame;
 
 /**
  * @author maf83

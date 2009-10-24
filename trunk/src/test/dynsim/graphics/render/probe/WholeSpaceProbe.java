@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.render.impl.GrainRender;
 import dynsim.graphics.render.util.DisplayImage;
 import dynsim.graphics.render.util.FloatRange;
@@ -14,6 +13,7 @@ import dynsim.simulator.helper.BoundsFinder;
 import dynsim.simulator.ode.OdeSimulator;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.*;
+import dynsim.ui.AppFrame;
 
 public class WholeSpaceProbe extends AppFrame {
 	private static final long serialVersionUID = 2639541437146777204L;

@@ -1,4 +1,4 @@
-package dynsim.graphics;
+package dynsim.ui;
 
 import java.awt.Dimension;
 import java.awt.Frame;

@@ -1,4 +1,4 @@
-package dynsim.graphics;
+package dynsim.ui;
 
 import java.awt.BufferCapabilities;
 import java.awt.Color;
@@ -14,6 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+
+import dynsim.graphics.animation.AnimationComponent;
 
 //TODO refactor!
 public class AnimationFrame extends AppFrame {
@@ -44,7 +46,7 @@ public class AnimationFrame extends AppFrame {
 	private void init(ArrayList<AnimationComponent> acl, boolean fsem) {
 		this.fsem = fsem;
 
-		// TODO callback para propiedades color..?¿
+		// TODO callback para propiedades color..?ï¿½
 		setBackground(Color.BLACK);
 
 		initScreen();

@@ -1,6 +1,6 @@
 package org.mafc.blob;
 
-import dynsim.graphics.AnimationFrame;
+import dynsim.ui.AnimationFrame;
 
 public class BlobViewer {
 	public static void main(String[] args) {

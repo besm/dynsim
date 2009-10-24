@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.render.RenderConfig;
 import dynsim.graphics.render.impl.DensityRenderer;
 import dynsim.graphics.render.util.DisplayImage;
@@ -17,6 +16,7 @@ import dynsim.simulator.helper.BoundsFinder;
 import dynsim.simulator.iteratedmap.IteratedMapSimulator;
 import dynsim.simulator.iteratedmap.system.IteratedMap;
 import dynsim.simulator.iteratedmap.system.impl.*;
+import dynsim.ui.AppFrame;
 
 /**
  * @author maf83

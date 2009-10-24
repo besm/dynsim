@@ -5,7 +5,6 @@ import java.awt.Color;
 
 import dynsim.data.Storage;
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.AppFrame;
 import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
@@ -15,6 +14,7 @@ import dynsim.simulator.SimulatorFactory;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.*;
 import dynsim.simulator.system.DynamicalSystem;
+import dynsim.ui.AppFrame;
 
 public class ReturnMapProbe extends AppFrame {
 	private static final long serialVersionUID = -4871969491316656883L;
@@ -65,7 +65,7 @@ public class ReturnMapProbe extends AppFrame {
 
 	private void sim() throws DynSimException {
 
-		// TODO sólo para rossler? Hacer poincaré section con condición o
+		// TODO sï¿½lo para rossler? Hacer poincarï¿½ section con condiciï¿½n o
 		// bien temporal o bien por corte!
 		// //////////////////////////////////////
 		// Ueda

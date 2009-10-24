@@ -1,4 +1,4 @@
-package dynsim.graphics;
+package dynsim.graphics.animation;
 
 import java.awt.Container;
 import java.awt.Dimension;

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import dynsim.graphics.AnimationComponent;
+import dynsim.graphics.animation.AnimationComponent;
 import dynsim.graphics.color.Palette;
 
 public class BlobScene extends AnimationComponent {
@@ -176,7 +176,7 @@ public class BlobScene extends AnimationComponent {
 			b2 = blobs.get(n);
 			f += b2.volume / b2.pxDist1P(x, y);
 
-			// Elongación
+			// Elongaciï¿½n
 			// f *= (b2.mass + b.mass) / (b.pxDist(x, y) * b2.pxDist(x, y));
 			f *= (b2.volume + b.volume) / (b.pxDist(x, y) * b2.pxDist(x, y));
 		}
