@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import dynsim.exceptions.DynSimException;
-import dynsim.graphics.render.impl.GrainRender;
+import dynsim.graphics.render.impl.GrainRenderer;
 import dynsim.graphics.render.util.DisplayImage;
 import dynsim.graphics.render.util.FloatRange;
 import dynsim.simulator.Simulator;
@@ -20,7 +20,7 @@ public class WholeSpaceProbe extends AppFrame {
 
 	Simulator dyn;
 
-	GrainRender rend;
+	GrainRenderer rend;
 
 	DisplayImage display;
 
@@ -68,7 +68,7 @@ public class WholeSpaceProbe extends AppFrame {
 			e.printStackTrace();
 		}
 
-		rend = new GrainRender();
+		rend = new GrainRenderer();
 		rend.setDetail(0.02f);
 		// rend.setAxisRanges(ax, ay, az);
 		ax.setMax(ax.getMax() + 0.1f);

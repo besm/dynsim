@@ -144,4 +144,8 @@ public abstract class AbstractDynamicalSystem implements DynamicalSystem {
 	public void setType(int type) {
 		this.type = type;
 	}
+
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
 }

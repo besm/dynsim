@@ -9,9 +9,9 @@ import java.awt.Color;
  * @author maf83
  * 
  */
-public class GrainRender extends DirectRenderer {
+public class GrainRenderer extends DirectRenderer {
 
-	public GrainRender() {
+	public GrainRenderer() {
 		super();
 		detail = 0.002f;
 	}
