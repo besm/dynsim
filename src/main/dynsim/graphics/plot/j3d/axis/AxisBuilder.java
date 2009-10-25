@@ -20,7 +20,7 @@ public class AxisBuilder {
 	 * Constructs an axis
 	 * 
 	 * @author Joy Kyriakopulos (joyk@fnal.gov)
-	 * @version $Id: AxisBuilder.java,v 1.2 2001/06/15 20:55:51 joyk Exp $
+	 * @version $Id$
 	 */
 	AxisBuilder() {
 		// build all the major components of the Axis, keeping the important

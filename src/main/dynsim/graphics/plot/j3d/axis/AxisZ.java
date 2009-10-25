@@ -7,7 +7,7 @@ import javax.vecmath.Vector3f;
 
 /**
  * @author Joy Kyriakopulos (joyk@fnal.gov)
- * @version $Id: ZAxisBuilder.java,v 1.3 2002/06/12 23:15:15 duns Exp $
+ * @version $Id$
  */
 public class AxisZ extends AxisBuilder {
 	public AxisZ() {

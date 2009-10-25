@@ -10,7 +10,7 @@ import javax.vecmath.*;
  * a 3D display.
  * 
  * @author Joy Kyriakopulos (joyk@fnal.gov)
- * @version $Id: AbstractPlotBuilder.java,v 1.1 2001/05/19 00:11:52 tonyj Exp $
+ * @version $Id$
  */
 public abstract class AbstractPlotBuilder {
 
