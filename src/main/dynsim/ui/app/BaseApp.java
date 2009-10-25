@@ -18,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.SpringLayout;
 
 import dynsim.exceptions.DynSimException;
@@ -143,8 +144,14 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		return panel;
 	}
 
-	protected JComponent createLeftConfigPanel() {
+	protected JPanel createLefBoxPanel() {
+		JPanel boxPane = new JPanel();
+		boxPane.setLayout(new BoxLayout(boxPane, BoxLayout.Y_AXIS));
+		boxPane.add(createLeftConfigPanel());
+		return boxPane;
+	}
 
+	protected JComponent createLeftConfigPanel() {
 		leftConfigPanel = new JPanel() {
 			private static final long serialVersionUID = -5837429055693038642L;
 
@@ -154,7 +161,7 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 				return new Dimension(Integer.MAX_VALUE, pref.height);
 			}
 		};
-		leftConfigPanel.setLayout(new BoxLayout(leftConfigPanel, BoxLayout.PAGE_AXIS));
+		leftConfigPanel.setLayout(new BoxLayout(leftConfigPanel, BoxLayout.Y_AXIS));
 		addToLeftConfigPanel();
 
 		return leftConfigPanel;
@@ -177,6 +184,18 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		filemenu.add(exit);
 
 		return menubar;
+	}
+
+	protected JSplitPane createSplitViewPanel(JPanel pane) {
+		return createSplitViewPanel(pane, createLefBoxPanel());
+	}
+
+	protected JSplitPane createSplitViewPanel(JPanel pane, JPanel leftPane) {
+		JSplitPane viewPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane, leftPane);
+		viewPane.setResizeWeight(0.5);
+		viewPane.setOneTouchExpandable(true);
+		viewPane.setContinuousLayout(true);
+		return viewPane;
 	}
 
 	protected JComponent createSystemFields() {
