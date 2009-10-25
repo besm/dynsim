@@ -22,37 +22,7 @@ public class PhaserApp extends BaseApp {
 	private JLabel status;
 	private JPanel graphPane;
 
-	public PhaserApp() {
-		super("Phaser 0.9.0");
-		system = new Rossler();
-		createPhaserUI();
-	}
-
-	private void createPhaserUI() {
-		setLayout(new BorderLayout());
-
-		status = new JLabel(STATUS_PREFIX);
-		status.setBorder(new EtchedBorder());
-		add(status, BorderLayout.SOUTH);
-
-		final JMenuBar menubar = createMenuBar();
-		setJMenuBar(menubar);
-
-		graphPane = new JPanel(new BorderLayout());
-		graphPane.setBackground(Color.BLACK);
-		graphPane.add(new Grapher2D(500, 500));
-		
-		final JSplitPane view = createSplitViewPanel(graphPane);
-
-		add(view);
-	}
-
-
-	protected void addToLeftConfigPanel() {
-		leftConfigPanel.add(createSystemFields());
-		// leftHalf.add(createGrapherConfigFields());
-		leftConfigPanel.add(createButtons());
-	}
+	private static final long serialVersionUID = -1284363571798838954L;
 
 	public static void main(String[] args) {
 		PhaserApp p = new PhaserApp();
@@ -60,7 +30,17 @@ public class PhaserApp extends BaseApp {
 		p.setVisible(true);
 	}
 
-	private static final long serialVersionUID = -1284363571798838954L;
+	public PhaserApp() {
+		super("Phaser 0.9.0");
+		system = new Rossler();
+		createPhaserUI();
+	}
+
+	protected void addToLeftConfigPanel() {
+		leftConfigPanel.add(createSystemFields());
+		// leftConfigPanel.add(new GraphConfig());
+		leftConfigPanel.add(createButtons());
+	}
 
 	@Override
 	protected void afterSimulation() {
@@ -79,6 +59,26 @@ public class PhaserApp extends BaseApp {
 	@Override
 	protected void setStatus(String s) {
 		status.setText(STATUS_PREFIX + s);
+	}
+
+	private void createPhaserUI() {
+		setLayout(new BorderLayout());
+
+		status = new JLabel(STATUS_PREFIX);
+		status.setBorder(new EtchedBorder());
+		add(status, BorderLayout.SOUTH);
+
+		final JMenuBar menubar = createMenuBar();
+		menubar.add(createSystemMenu());
+		setJMenuBar(menubar);
+
+		graphPane = new JPanel(new BorderLayout());
+		graphPane.setBackground(Color.BLACK);
+		graphPane.add(new Grapher2D(500, 500));
+
+		final JSplitPane view = createSplitViewPanel(graphPane);
+
+		add(view, BorderLayout.CENTER);
 	}
 
 }
