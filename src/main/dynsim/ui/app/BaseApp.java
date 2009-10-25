@@ -7,10 +7,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -18,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSplitPane;
 import javax.swing.SpringLayout;
 
@@ -29,6 +34,7 @@ import dynsim.simulator.system.DynamicalSystem;
 import dynsim.ui.JAppFrame;
 import dynsim.ui.JNumericSpinner;
 import dynsim.ui.SpringUtilities;
+import dynsim.ui.app.utils.SystemLoader;
 
 public abstract class BaseApp extends JAppFrame implements ActionListener, ItemListener {
 	private class SimulationWorker implements Runnable {
@@ -57,21 +63,23 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 	}
 
 	protected static final String RUNSIM_CMD = "runsim";
-
 	protected static final String STOPSIM_CMD = "stopsim";
 	protected static final String EXIT_CMD = "exit";
+	protected static final String REFRESH_UI_CMD = "refreshUI";
 
 	protected final static int GAP = 10;
+
 	protected volatile Thread simulationThread;
 	protected Simulator simulator;
 	protected DynamicalSystem system;
 	private String[] parameterLabels;
 	private JNumericSpinner[] parameterFields;
-
 	protected JButton runsim;
 	protected JButton stopsim;
-
 	protected JPanel leftConfigPanel;
+	protected ButtonGroup systemChoice;
+
+	protected HashMap<String, Class<DynamicalSystem>> systemClassNames;
 
 	private static final long serialVersionUID = -8767220695127049878L;
 
@@ -86,7 +94,16 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 			stopWorker();
 		} else if (EXIT_CMD.equals(e.getActionCommand())) {
 			exitApplication();
+		} else if (REFRESH_UI_CMD.equals(e.getActionCommand())) {
+			refreshConfigUI();
 		}
+	}
+
+	protected void refreshConfigUI() {
+		createSystem();
+		leftConfigPanel.removeAll();
+		addToLeftConfigPanel();
+		leftConfigPanel.updateUI();
 	}
 
 	@Override
@@ -198,6 +215,17 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		return viewPane;
 	}
 
+	protected void createSystem() {
+		Enumeration<AbstractButton> elements = systemChoice.getElements();
+		while (elements.hasMoreElements()) {
+			AbstractButton button = elements.nextElement();
+			if (button.isSelected()) {
+				system = newDynamicalSystem(button.getName());
+				break;
+			}
+		}
+	}
+
 	protected JComponent createSystemFields() {
 		JPanel panel = new JPanel(new SpringLayout());
 		final Parameters params = system.getParameters();
@@ -217,12 +245,62 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		return panel;
 	}
 
+	protected JMenu createSystemMenu() {
+		JMenu sysmenu = new JMenu("System");
+
+		systemChoice = new ButtonGroup();
+
+		createOdeSubmenu(sysmenu);
+
+		return sysmenu;
+	}
+
+	private void createOdeSubmenu(JMenu sysmenu) {
+		JMenu submenu = new JMenu("ODE");
+		submenu.setMnemonic(KeyEvent.VK_O);
+		sysmenu.add(submenu);
+
+		loadOdeSystems();
+
+		for (String sysname : systemClassNames.keySet()) {
+			JRadioButtonMenuItem radio = new JRadioButtonMenuItem(sysname);
+			radio.setActionCommand(REFRESH_UI_CMD);
+			radio.addActionListener(this);
+			radio.setName(sysname);
+			systemChoice.add(radio);
+			submenu.add(radio);
+		}
+	}
+
 	protected void exitApplication() {
 		System.exit(0);
 	}
 
 	protected void initializeSimulator() {
 		simulator = SimulatorFactory.createSimulator(system);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void loadOdeSystems() {
+		systemClassNames = new HashMap<String, Class<DynamicalSystem>>();
+		final Set<Class> classes = SystemLoader.getOdeSystemClasses();
+		for (Class clazz : classes) {
+			systemClassNames.put(clazz.getSimpleName(), clazz);
+		}
+	}
+
+	protected DynamicalSystem newDynamicalSystem(String name) {
+		DynamicalSystem tmp = null;
+		try {
+			tmp = systemClassNames.get(name).newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return tmp;
 	}
 
 	protected void onSimulationEnd() {

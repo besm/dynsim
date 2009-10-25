@@ -3,7 +3,6 @@ package dynsim.ui.app;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ButtonGroup;
@@ -25,7 +24,6 @@ import dynsim.graphics.render.impl.DensityRenderer;
 import dynsim.graphics.render.impl.ReflectorRenderer;
 import dynsim.graphics.render.util.DisplayImage;
 import dynsim.simulator.SimulatorFactory;
-import dynsim.simulator.ode.system.impl.Chua;
 import dynsim.simulator.ode.system.impl.Crispy;
 import dynsim.ui.JNumericSpinner;
 
@@ -35,8 +33,6 @@ import dynsim.ui.JNumericSpinner;
  * 
  */
 public class RenderApp extends BaseApp {
-
-	private static final String REFRESH_UI_CMD = "refreshUI";
 
 	private static final String STATUS_PREFIX = "RenderApp: ";
 
@@ -70,30 +66,12 @@ public class RenderApp extends BaseApp {
 
 	private JRadioButtonMenuItem densityRadio;
 
-	private ButtonGroup systemChoice;
-
-	private JRadioButtonMenuItem crispyRadio;
-
-	private JRadioButtonMenuItem chuaRadio;
-
 	private JRadioButtonMenuItem reflectorRadio;
 
 	public RenderApp() {
 		super("Renderer 0.9.0");
 		system = new Crispy();
 		createRendererUI();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		super.actionPerformed(e);
-
-		if (REFRESH_UI_CMD.equals(e.getActionCommand())) {
-			createSystem();
-			leftConfigPanel.removeAll();
-			addToLeftConfigPanel();
-			leftConfigPanel.repaint();
-		}
 	}
 
 	public void clearDisplay() {
@@ -134,22 +112,7 @@ public class RenderApp extends BaseApp {
 		rendererChoice.add(densityRadio);
 		rendermenu.add(densityRadio);
 
-		JMenu sysmenu = new JMenu("System");
-		menubar.add(sysmenu);
-
-		systemChoice = new ButtonGroup();
-		crispyRadio = new JRadioButtonMenuItem("Crispy");
-		crispyRadio.setSelected(true);
-		crispyRadio.setActionCommand(REFRESH_UI_CMD);
-		crispyRadio.addActionListener(this);
-		systemChoice.add(crispyRadio);
-		sysmenu.add(crispyRadio);
-
-		chuaRadio = new JRadioButtonMenuItem("Chua");
-		chuaRadio.addActionListener(this);
-		chuaRadio.setActionCommand(REFRESH_UI_CMD);
-		systemChoice.add(chuaRadio);
-		sysmenu.add(chuaRadio);
+		menubar.add(createSystemMenu());
 
 		return menubar;
 	}
@@ -225,14 +188,6 @@ public class RenderApp extends BaseApp {
 		return panel;
 	}
 
-	protected void createSystem() {
-		if (systemChoice.isSelected(crispyRadio.getModel())) {
-			system = new Crispy();
-		} else if (systemChoice.isSelected(chuaRadio.getModel())) {
-			system = new Chua();
-		}
-	}
-
 	protected void initializeSimulator() {
 		createRenderer();
 
@@ -254,7 +209,6 @@ public class RenderApp extends BaseApp {
 
 	protected void runSimulation() {
 		clearDisplay();
-
 		super.runSimulation();
 	}
 
