@@ -3,10 +3,10 @@ package dynsim.ui.app;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.border.EtchedBorder;
 
 import dynsim.data.Storage;
@@ -38,18 +38,15 @@ public class PhaserApp extends BaseApp {
 		final JMenuBar menubar = createMenuBar();
 		setJMenuBar(menubar);
 
-		createLeftConfigPanel();
-
-		graphPane = new JPanel();
+		graphPane = new JPanel(new BorderLayout());
 		graphPane.setBackground(Color.BLACK);
 		graphPane.add(new Grapher2D(500, 500));
-		JPanel boxPane = new JPanel();
-		boxPane.setLayout(new BoxLayout(boxPane, BoxLayout.LINE_AXIS));
-		boxPane.add(graphPane);
-		boxPane.add(leftConfigPanel);
+		
+		final JSplitPane view = createSplitViewPanel(graphPane);
 
-		add(boxPane, BorderLayout.CENTER);
+		add(view);
 	}
+
 
 	protected void addToLeftConfigPanel() {
 		leftConfigPanel.add(createSystemFields());

@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -14,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 import javax.swing.border.EtchedBorder;
@@ -103,6 +103,12 @@ public class RenderApp extends BaseApp {
 		g.fillRect(0, 0, img.getWidth(), img.getHeight());
 	}
 
+	protected void addToLeftConfigPanel() {
+		leftConfigPanel.add(createSystemFields());
+		leftConfigPanel.add(createRenderFields());
+		leftConfigPanel.add(createButtons());
+	}
+
 	protected void afterSimulation() {
 		display.setImage(renderer.getImage());
 		display.repaint();
@@ -170,16 +176,13 @@ public class RenderApp extends BaseApp {
 
 		display = new DisplayImage(400, 400);
 		clearDisplay();
+		JPanel displayPane = new JPanel();
+		displayPane.add(display);
 
-		createLeftConfigPanel();
-
-		JPanel boxPane = new JPanel();
-		boxPane.setLayout(new BoxLayout(boxPane, BoxLayout.LINE_AXIS));
-		boxPane.add(display);
-		boxPane.add(leftConfigPanel);
+		JSplitPane viewPane = createSplitViewPanel(displayPane);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("View", null, boxPane, "Main view");
+		tabbedPane.addTab("View", null, viewPane, "Main view");
 
 		JPanel configPane = new JPanel();
 		tabbedPane.addTab("Configuration", configPane);
@@ -257,11 +260,5 @@ public class RenderApp extends BaseApp {
 
 	protected void setStatus(String s) {
 		status.setText(STATUS_PREFIX + s);
-	}
-
-	protected void addToLeftConfigPanel() {
-		leftConfigPanel.add(createSystemFields());
-		leftConfigPanel.add(createRenderFields());
-		leftConfigPanel.add(createButtons());
 	}
 }
