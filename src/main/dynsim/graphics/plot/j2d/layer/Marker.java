@@ -24,4 +24,8 @@ public interface Marker {
 	public double getCoord(String key);
 
 	public void draw(Grapher2D g);
+	
+	public String getDescription();
+	
+	public void setDescription(String description);
 }

@@ -42,7 +42,7 @@ public class Stability {
 				s += "as. stable spiral point ";
 			}
 			if (rsum == 0) {
-				s += "stable center (non-linear: ¿?)";
+				s += "stable center (non-linear)";
 			}
 		}
 

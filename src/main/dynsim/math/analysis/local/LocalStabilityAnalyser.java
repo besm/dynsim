@@ -44,7 +44,7 @@ public class LocalStabilityAnalyser implements Computable {
 		this.mode = EQUILIBRIUM;
 	}
 
-	// TODO buscar un buen método de raíces múltiples...
+	// TODO buscar un buen mï¿½todo de raï¿½ces mï¿½ltiples...
 	public void compute() {
 		double[] params = new double[sys.getIndepVarsNumNoTime()];
 
@@ -188,6 +188,7 @@ public class LocalStabilityAnalyser implements Computable {
 		EigenvalueDecomposition eig = jac.eig();
 		double[] imag = eig.getImagEigenvalues();
 		double[] real = eig.getRealEigenvalues();
+		fp.setDescription(Stability.getPointType(real, imag));
 		int st = Stability.isStable(real, imag);
 		if (st == 0) {
 			if (fp.getType() == FIXED) {

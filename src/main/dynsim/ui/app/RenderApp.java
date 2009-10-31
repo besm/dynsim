@@ -78,7 +78,7 @@ public class RenderApp extends BaseApp {
 
 	protected void addToLeftConfigPanel() {
 		leftConfigPanel.add(createSystemFields());
-		leftConfigPanel.add(CreateSimulatorFields());
+		leftConfigPanel.add(createSimulatorFields());
 		leftConfigPanel.add(createRenderFields());
 		leftConfigPanel.add(createPlayerButtons());
 	}
