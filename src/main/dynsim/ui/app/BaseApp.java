@@ -1,5 +1,6 @@
 package dynsim.ui.app;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Set;
@@ -15,6 +17,7 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -24,6 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 import javax.swing.SpringLayout;
 
 import dynsim.exceptions.DynSimException;
@@ -67,6 +71,8 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 	protected static final String EXIT_CMD = "exit";
 	protected static final String REFRESH_UI_CMD = "refreshUI";
 
+	private static final int DEFAULT_ITERS = 15000;
+	private static final int DEFAULT_SKIP = 1000;
 	protected final static int GAP = 10;
 
 	protected volatile Thread simulationThread;
@@ -78,8 +84,12 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 	protected JButton stopsim;
 	protected JPanel leftConfigPanel;
 	protected ButtonGroup systemChoice;
+	private JNumericSpinner skip;
+	private JNumericSpinner maxiters;
 
 	protected HashMap<String, Class<DynamicalSystem>> systemClassNames;
+	private AbstractButton stopMenuItem;
+	private JMenuItem runMenuItem;
 
 	private static final long serialVersionUID = -8767220695127049878L;
 
@@ -99,13 +109,6 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		}
 	}
 
-	protected void refreshConfigUI() {
-		createSystem();
-		leftConfigPanel.removeAll();
-		addToLeftConfigPanel();
-		leftConfigPanel.updateUI();
-	}
-
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// void
@@ -113,7 +116,15 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 
 	protected void addToLeftConfigPanel() {
 		leftConfigPanel.add(createSystemFields());
-		leftConfigPanel.add(createButtons());
+		leftConfigPanel.add(CreateSimulatorFields());
+		leftConfigPanel.add(createPlayerButtonBar());
+	}
+
+	protected Component createPlayerButtonBar() {
+		JToolBar toolbar = new JToolBar("Simulation player");
+		toolbar.setOrientation(JToolBar.VERTICAL);
+		toolbar.add(createPlayerButtons());
+		return toolbar;
 	}
 
 	protected abstract void afterSimulation();
@@ -135,24 +146,20 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 				GAP, GAP / 2);// xpad, ypad
 	}
 
-	protected JComponent createButtons() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+	protected JComponent createPlayerButtons() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		runsim = new JButton("Run");
+		runsim = makeButton("Play24", RUNSIM_CMD, "Run simulation", "Run");
 		runsim.setVerticalTextPosition(AbstractButton.CENTER);
 		runsim.setHorizontalTextPosition(AbstractButton.LEADING);
 		runsim.setMnemonic(KeyEvent.VK_R);
-		runsim.setActionCommand(RUNSIM_CMD);
-		runsim.addActionListener(this);
 		panel.add(runsim);
 
-		stopsim = new JButton("Stop");
+		stopsim = makeButton("Stop24", STOPSIM_CMD, "Stop simulation", "Stop");
 		stopsim.setEnabled(false);
 		stopsim.setVerticalTextPosition(AbstractButton.CENTER);
 		stopsim.setHorizontalTextPosition(AbstractButton.LEADING);
 		stopsim.setMnemonic(KeyEvent.VK_S);
-		stopsim.setActionCommand(STOPSIM_CMD);
-		stopsim.addActionListener(this);
 		panel.add(stopsim);
 
 		// Match the SpringLayout's gap, subtracting 5 to make
@@ -189,7 +196,7 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		JMenu filemenu = new JMenu("File");
 		menubar.add(filemenu);
 
-		JMenuItem saveimg = new JMenuItem("Save Image");
+		JMenuItem saveimg = new JMenuItem("Save Image...");
 		filemenu.add(saveimg);
 		filemenu.addSeparator();
 		JMenuItem cleardisplay = new JMenuItem("Clear Display");
@@ -201,6 +208,37 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		filemenu.add(exit);
 
 		return menubar;
+	}
+
+	protected JMenu createRunMenu() {
+		JMenu runmenu = new JMenu("Run");
+		runMenuItem = new JMenuItem("Run simulation");
+		runMenuItem.setActionCommand(RUNSIM_CMD);
+		runMenuItem.addActionListener(this);
+		runmenu.add(runMenuItem);
+		stopMenuItem = new JMenuItem("Stop simulation");
+		stopMenuItem.setEnabled(false);
+		stopMenuItem.setActionCommand(STOPSIM_CMD);
+		stopMenuItem.addActionListener(this);
+		runmenu.add(stopMenuItem);
+		return runmenu;
+	}
+
+	protected Component CreateSimulatorFields() {
+		JPanel panel = new JPanel(new SpringLayout());
+
+		String[] labelStrings = { "Skip: ", "Iterations: " };
+		JLabel[] labels = new JLabel[labelStrings.length];
+		JComponent[] fields = new JComponent[labelStrings.length];
+		int fieldNum = 0;
+		skip = new JNumericSpinner(DEFAULT_SKIP, 1000, 200000, 100);
+		fields[fieldNum++] = skip;
+
+		maxiters = new JNumericSpinner(DEFAULT_ITERS, 5000, 999999999, 10000);
+		fields[fieldNum++] = maxiters;
+
+		composePanel(panel, "Simulation Properties", labelStrings, labels, fields);
+		return panel;
 	}
 
 	protected JSplitPane createSplitViewPanel(JPanel pane) {
@@ -255,29 +293,14 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		return sysmenu;
 	}
 
-	private void createOdeSubmenu(JMenu sysmenu) {
-		JMenu submenu = new JMenu("ODE");
-		submenu.setMnemonic(KeyEvent.VK_O);
-		sysmenu.add(submenu);
-
-		loadOdeSystems();
-
-		for (String sysname : systemClassNames.keySet()) {
-			JRadioButtonMenuItem radio = new JRadioButtonMenuItem(sysname);
-			radio.setActionCommand(REFRESH_UI_CMD);
-			radio.addActionListener(this);
-			radio.setName(sysname);
-			systemChoice.add(radio);
-			submenu.add(radio);
-		}
-	}
-
 	protected void exitApplication() {
 		System.exit(0);
 	}
 
 	protected void initializeSimulator() {
 		simulator = SimulatorFactory.createSimulator(system);
+		simulator.setSkip(skip.getInt());
+		simulator.setItersMax(maxiters.getInt());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -294,7 +317,6 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		try {
 			tmp = systemClassNames.get(name).newInstance();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -304,19 +326,37 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 	}
 
 	protected void onSimulationEnd() {
-		stopsim.setEnabled(false);
-		runsim.setEnabled(true);
+		toogglePlayerComps();
+	}
+
+	private void toogglePlayerComps() {
+		tooggle(runsim);
+		tooggle(runMenuItem);
+		tooggle(stopsim);
+		tooggle(stopMenuItem);
 	}
 
 	protected void onSimulationStart() {
-		runsim.setEnabled(false);
-		stopsim.setEnabled(true);
+		toogglePlayerComps();
+	}
+
+	protected void tooggle(JComponent component) {
+		if (component != null) {
+			component.setEnabled(!component.isEnabled());
+		}
 	}
 
 	protected void prepareSystem() {
 		for (int i = 0; i < parameterLabels.length; i++) {
 			system.setParameter(parameterLabels[i], parameterFields[i].getDouble());
 		}
+	}
+
+	protected void refreshConfigUI() {
+		createSystem();
+		leftConfigPanel.removeAll();
+		addToLeftConfigPanel();
+		leftConfigPanel.updateUI();
 	}
 
 	protected void runSimulation() {
@@ -342,5 +382,43 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		if (tmp != null) {
 			tmp.interrupt();
 		}
+	}
+
+	private void createOdeSubmenu(JMenu sysmenu) {
+		JMenu submenu = new JMenu("ODE");
+		submenu.setMnemonic(KeyEvent.VK_O);
+		sysmenu.add(submenu);
+
+		loadOdeSystems();
+
+		for (String sysname : systemClassNames.keySet()) {
+			JRadioButtonMenuItem radio = new JRadioButtonMenuItem(sysname);
+			radio.setActionCommand(REFRESH_UI_CMD);
+			radio.addActionListener(this);
+			radio.setName(sysname);
+			systemChoice.add(radio);
+			submenu.add(radio);
+		}
+	}
+
+	protected JButton makeButton(String imageName, String actionCommand, String toolTipText, String altText) {
+		// Look for the image.
+		String imgLocation = "images/" + imageName + ".gif";
+		URL imageURL = BaseApp.class.getResource(imgLocation);
+
+		// Create and initialize the button.
+		JButton button = new JButton();
+		button.setActionCommand(actionCommand);
+		button.setToolTipText(toolTipText);
+		button.addActionListener(this);
+
+		if (imageURL != null) { // image found
+			button.setIcon(new ImageIcon(imageURL, altText));
+		} else { // no image found
+			button.setText(altText);
+			System.err.println("Resource not found: " + imgLocation);
+		}
+
+		return button;
 	}
 }
