@@ -38,12 +38,10 @@ public class RenderApp extends BaseApp {
 
 	private static final long serialVersionUID = 8893216423390898264L;
 
-	private static final int DEFAULT_ITERS = 15000;
-	private static final int DEFAULT_SKIP = 1000;
-
 	public static void main(String[] args) {
 		BaseApp p = new RenderApp();
 		p.pack();
+		p.center();
 		p.setVisible(true);
 	}
 
@@ -52,10 +50,7 @@ public class RenderApp extends BaseApp {
 
 	private Renderer renderer;
 
-	private JNumericSpinner maxiters;
 	private JNumericSpinner detail;
-
-	private JNumericSpinner skip;
 	private JNumericSpinner gamma;
 	private JNumericSpinner scale;
 	private JNumericSpinner offset;
@@ -83,8 +78,9 @@ public class RenderApp extends BaseApp {
 
 	protected void addToLeftConfigPanel() {
 		leftConfigPanel.add(createSystemFields());
+		leftConfigPanel.add(CreateSimulatorFields());
 		leftConfigPanel.add(createRenderFields());
-		leftConfigPanel.add(createButtons());
+		leftConfigPanel.add(createPlayerButtons());
 	}
 
 	protected void afterSimulation() {
@@ -156,17 +152,11 @@ public class RenderApp extends BaseApp {
 	protected JComponent createRenderFields() {
 		JPanel panel = new JPanel(new SpringLayout());
 
-		String[] labelStrings = { "Skip: ", "Iterations: ", "Grain: ", "Gamma: ", "Scale: ", "Offset: " };
+		String[] labelStrings = { "Grain: ", "Gamma: ", "Scale: ", "Offset: " };
 
 		JLabel[] labels = new JLabel[labelStrings.length];
 		JComponent[] fields = new JComponent[labelStrings.length];
 		int fieldNum = 0;
-
-		skip = new JNumericSpinner(DEFAULT_SKIP, 1000, 200000, 100);
-		fields[fieldNum++] = skip;
-
-		maxiters = new JNumericSpinner(DEFAULT_ITERS, 5000, 999999999, 10000);
-		fields[fieldNum++] = maxiters;
 
 		detail = new JNumericSpinner(0.015, 0.0, 2.0, 0.005);
 		detail.setEditor(new JNumericSpinner.NumberEditor(detail, "#0.0000"));
@@ -199,9 +189,6 @@ public class RenderApp extends BaseApp {
 			renderer.setGamma(gamma.getFloat());
 			renderer.setScale(scale.getFloat());
 			renderer.setOffset(offset.getFloat());
-
-			simulator.setSkip(skip.getInt());
-			simulator.setItersMax(maxiters.getInt());
 		} catch (DynSimException e) {
 			e.printStackTrace();
 		}
