@@ -116,7 +116,7 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 
 	protected void addToLeftConfigPanel() {
 		leftConfigPanel.add(createSystemFields());
-		leftConfigPanel.add(CreateSimulatorFields());
+		leftConfigPanel.add(createSimulatorFields());
 		leftConfigPanel.add(createPlayerButtonBar());
 	}
 
@@ -224,17 +224,17 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		return runmenu;
 	}
 
-	protected Component CreateSimulatorFields() {
+	protected Component createSimulatorFields() {
 		JPanel panel = new JPanel(new SpringLayout());
 
 		String[] labelStrings = { "Skip: ", "Iterations: " };
 		JLabel[] labels = new JLabel[labelStrings.length];
 		JComponent[] fields = new JComponent[labelStrings.length];
 		int fieldNum = 0;
-		skip = new JNumericSpinner(DEFAULT_SKIP, 1000, 200000, 100);
+		skip = new JNumericSpinner(DEFAULT_SKIP, 0, 200000, 10);
 		fields[fieldNum++] = skip;
 
-		maxiters = new JNumericSpinner(DEFAULT_ITERS, 5000, 999999999, 10000);
+		maxiters = new JNumericSpinner(DEFAULT_ITERS, 100, 999999999, 1000);
 		fields[fieldNum++] = maxiters;
 
 		composePanel(panel, "Simulation Properties", labelStrings, labels, fields);
@@ -247,7 +247,7 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 
 	protected JSplitPane createSplitViewPanel(JPanel pane, JPanel leftPane) {
 		JSplitPane viewPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane, leftPane);
-		viewPane.setResizeWeight(0.5);
+		viewPane.setResizeWeight(1);
 		viewPane.setOneTouchExpandable(true);
 		viewPane.setContinuousLayout(true);
 		return viewPane;

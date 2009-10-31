@@ -16,6 +16,8 @@ public abstract class AbstractMarker implements Marker {
 
 	private Color color;
 
+	private String description;
+
 	public AbstractMarker(double[] coords) {
 		this.coords = coords;
 		this.coordNames = new String[] { "x", "y", "z" };
@@ -91,5 +93,15 @@ public abstract class AbstractMarker implements Marker {
 	}
 
 	protected abstract void draw(float x, float y, Grapher2D g);
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 }
