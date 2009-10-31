@@ -160,7 +160,7 @@ public class PhaserApp extends BaseApp {
 		varY.setSelectedItem("y");
 		fields[fieldNum++] = varY;
 
-		composePanel(panel, "Simulation Properties", labelStrings, labels, fields);
+		composePanel(panel, "Plot variables", labelStrings, labels, fields);
 		return panel;
 	}
 
