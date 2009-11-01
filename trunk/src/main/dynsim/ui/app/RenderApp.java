@@ -36,6 +36,8 @@ import dynsim.ui.JNumericSpinner;
  */
 public class RenderApp extends BaseApp {
 
+	private static final Color DEFAULT_DISPLAY_BG = Color.GRAY;
+
 	private static final String STATUS_PREFIX = "RenderApp: ";
 
 	private static final long serialVersionUID = 8893216423390898264L;
@@ -75,6 +77,8 @@ public class RenderApp extends BaseApp {
 
 	private AbstractButton grainRadio;
 
+	private JPanel displayPane;
+
 	public RenderApp() {
 		super("Renderer 0.9.0");
 		system = new Crispy();
@@ -84,8 +88,9 @@ public class RenderApp extends BaseApp {
 	public void clearDisplay() {
 		final BufferedImage img = display.getImg();
 		final Graphics g = img.getGraphics();
-		g.setColor(Color.GRAY);
+		g.setColor(DEFAULT_DISPLAY_BG);
 		g.fillRect(0, 0, img.getWidth(), img.getHeight());
+		displayPane.updateUI();
 	}
 
 	protected void afterSimulation() {
@@ -145,10 +150,10 @@ public class RenderApp extends BaseApp {
 		setJMenuBar(menubar);
 
 		display = new DisplayImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		clearDisplay();
-		JPanel displayPane = new JPanel();
-		displayPane.setBackground(Color.GRAY);
+		displayPane = new JPanel();
+		displayPane.setBackground(DEFAULT_DISPLAY_BG);
 		displayPane.add(display);
+		clearDisplay();
 
 		JSplitPane viewPane = createSplitViewPanel(displayPane);
 
@@ -211,7 +216,6 @@ public class RenderApp extends BaseApp {
 		final int h = heightSpin.getInt();
 		if (display.getWidth() != w || display.getHeight() != h) {
 			display.setSize(w, h);
-			clearDisplay();
 		}
 
 		try {
