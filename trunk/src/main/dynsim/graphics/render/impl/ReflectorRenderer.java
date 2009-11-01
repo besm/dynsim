@@ -91,8 +91,6 @@ public class ReflectorRenderer extends AbstractRenderer {
 
 	@Override
 	public void initialize() {
-		varpos = new int[] { 1, 2, 3 };
-
 		conf = new RenderConfig(RenderConfig.MODE_3D);
 
 		points = new Sample[w][h];
