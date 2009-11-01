@@ -332,7 +332,7 @@ public abstract class AbstractRenderer implements Renderer {
 		g = img.getGraphics();
 
 		if (backgroundColor == null) {
-			backgroundColor = Color.DARK_GRAY.darker();
+			backgroundColor = Color.BLACK;
 		}
 
 		g.setColor(backgroundColor);
