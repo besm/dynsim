@@ -12,11 +12,15 @@ import dynsim.graphics.render.util.FloatRange;
 public abstract class DirectRenderer extends AbstractRenderer {
 
 	public DirectRenderer() {
-		// TODO config
-		w = 400;
-		h = 400;
-		d = 400;
+		super();
+	}
 
+	public void rasterize() {
+		// directo.
+	}
+
+	@Override
+	public void initialize() {
 		// TODO TOCAR al cambiar de ode a map
 		varpos = new int[] { 0, 1, 2 };
 
@@ -32,7 +36,4 @@ public abstract class DirectRenderer extends AbstractRenderer {
 		setAllAxisRanges(new FloatRange(-50, 50));
 	}
 
-	public void rasterize() {
-		// directo.
-	}
 }

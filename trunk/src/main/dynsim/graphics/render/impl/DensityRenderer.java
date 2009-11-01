@@ -23,21 +23,7 @@ public class DensityRenderer extends AbstractRenderer {
 
 
 	public DensityRenderer() {
-		setDimensions(400, 400, 400);
-
-		cam = new Camera();
-		cam.setEye(w / 2, h / 2, d * d);
-		cam.setZoom(0.85f);
-
-		setAllAxisRanges(new FloatRange(-50, 50));
-		setDetail(0.0015f);
-		setDefaultCorrection();
-
-		varpos = new int[] { 1, 2, 3 };
-
-		conf = new RenderConfig(RenderConfig.Z_BUFFER | RenderConfig.MODE_3D);
-
-		bins = new float[w][h];
+		super();
 	}
 
 	/**
@@ -136,6 +122,23 @@ public class DensityRenderer extends AbstractRenderer {
 				putPx(x, y, r, g, b);
 			}
 		}
+	}
+
+	@Override
+	public void initialize() {
+		cam = new Camera();
+		cam.setEye(w / 2, h / 2, d * d);
+		cam.setZoom(0.85f);
+
+		setAllAxisRanges(new FloatRange(-50, 50));
+		setDetail(0.0015f);
+		setDefaultCorrection();
+
+		varpos = new int[] { 1, 2, 3 };
+
+		conf = new RenderConfig(RenderConfig.Z_BUFFER | RenderConfig.MODE_3D);
+
+		bins = new float[w][h];
 	}
 
 }

@@ -74,6 +74,7 @@ public class RenderProbe extends AppFrame {
 		bounds(new IteratedMapSimulator(sys));
 
 		rend = new GrainRenderer();
+		rend.initialize();
 		// rend.setAxisRanges(ax, ay, az);
 		ax.setMax(ax.getMax() + 0.1f);
 		ay.setMax(ay.getMax() + 0.1f);

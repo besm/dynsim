@@ -59,6 +59,12 @@ public abstract class AbstractRenderer implements Renderer {
 
 	protected String directory;
 
+	
+	
+	public AbstractRenderer() {
+		setDimensions(400, 400, 400);
+	}
+
 	public String getDirectory() {
 		return directory;
 	}
@@ -468,4 +474,5 @@ public abstract class AbstractRenderer implements Renderer {
 		return !(gamma == 1 && scale == 1 && offset == 0);
 	}
 
+	public abstract void initialize();
 }

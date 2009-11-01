@@ -27,7 +27,7 @@ public class CasterRenderer extends AbstractRenderer {
 
 	private static final int R = 0;
 
-	private final Sample[][] points;
+	private Sample[][] points;
 
 	float maxz;
 
@@ -46,18 +46,19 @@ public class CasterRenderer extends AbstractRenderer {
 
 	private float ka;
 
-	private final List<Light> lights;
+	private List<Light> lights;
 
 	private Vector3D V;
 
-	private final Shader shader;
+	private Shader shader;
 
 	public CasterRenderer() {
+		super();
 		filename = "casterend";
 		directory = "data/images";
+	}
 
-		setDimensions(400, 400, 400);
-
+	public void initialize() {
 		conf = new RenderConfig(RenderConfig.MODE_3D);
 
 		lights = new ArrayList<Light>();

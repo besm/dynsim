@@ -22,6 +22,10 @@ public class DisplayImage extends Component {
 	public DisplayImage(int width, int height) {
 		pw = width;
 		ph = height;
+		createImage();
+	}
+
+	private void createImage() {
 		img = new BufferedImage(pw, ph, BufferedImage.TYPE_INT_RGB);
 	}
 
@@ -53,5 +57,13 @@ public class DisplayImage extends Component {
 	 */
 	public Dimension getMinimumSize() {
 		return new Dimension(100, 100);
+	}
+
+	@Override
+	public void setSize(int width, int height) {
+		super.setSize(width, height);
+		pw = width;
+		ph = height;
+		createImage();
 	}
 }
