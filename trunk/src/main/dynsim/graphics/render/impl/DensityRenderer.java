@@ -134,8 +134,6 @@ public class DensityRenderer extends AbstractRenderer {
 		setDetail(0.0015f);
 		setDefaultCorrection();
 
-		varpos = new int[] { 1, 2, 3 };
-
 		conf = new RenderConfig(RenderConfig.Z_BUFFER | RenderConfig.MODE_3D);
 
 		bins = new float[w][h];
