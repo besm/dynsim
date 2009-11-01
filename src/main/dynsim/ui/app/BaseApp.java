@@ -89,8 +89,8 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 	protected JButton stopsim;
 	protected JPanel leftConfigPanel;
 	protected ButtonGroup systemChoice;
-	private JNumericSpinner skip;
-	private JNumericSpinner maxiters;
+	protected JNumericSpinner skip;
+	protected JNumericSpinner maxiters;
 
 	protected HashMap<String, Class<? extends DynamicalSystem>> systemClassNames;
 	private AbstractButton stopMenuItem;

@@ -21,7 +21,6 @@ public class DensityRenderer extends AbstractRenderer {
 
 	protected float maxz;
 
-	protected float exposure;
 
 	public DensityRenderer() {
 		setDimensions(400, 400, 400);
@@ -33,8 +32,6 @@ public class DensityRenderer extends AbstractRenderer {
 		setAllAxisRanges(new FloatRange(-50, 50));
 		setDetail(0.0015f);
 		setDefaultCorrection();
-
-		exposure = 1f;
 
 		varpos = new int[] { 1, 2, 3 };
 
@@ -100,14 +97,14 @@ public class DensityRenderer extends AbstractRenderer {
 		}
 	}
 
-	// TODO buffer de color por bin según velocidad
+	// TODO buffer de color por bin segï¿½n velocidad
 	public void rasterize() {
 		initImage();
 
 		float r = 0, g = 0, b = 0;
 
 		if (conf.isEnabled(RenderConfig.Z_BUFFER)) {
-			scale(exposure, maxz, zbuff);
+			scale(scale, maxz, zbuff);
 		}
 
 		for (int x = 0; x < w; x++) {
@@ -124,13 +121,13 @@ public class DensityRenderer extends AbstractRenderer {
 
 				if (conf.isEnabled(RenderConfig.Z_BUFFER)) {
 					float zi = zbuff[x][y];
-					float al = logTransfer(bins[x][y], exposure);
+					float al = logTransfer(bins[x][y], scale);
 
 					r = ((1 - al) * dr) + (al * zi);
 					g = ((1 - al) * dg) + (al * zi);
 					b = ((1 - al) * db) + (al * zi);
 				} else {
-					float al = logTransfer(bins[x][y], exposure);
+					float al = logTransfer(bins[x][y], scale);
 					r = ((1 - al) * dr) + (al);
 					g = ((1 - al) * dg) + (al);
 					b = ((1 - al) * db) + (al);
@@ -141,11 +138,4 @@ public class DensityRenderer extends AbstractRenderer {
 		}
 	}
 
-	public float getExposure() {
-		return exposure;
-	}
-
-	public void setExposure(float exposure) {
-		this.exposure = exposure;
-	}
 }
