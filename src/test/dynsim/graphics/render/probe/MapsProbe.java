@@ -72,6 +72,7 @@ public class MapsProbe extends AppFrame {
 		bounds(new IteratedMapSimulator(sys));
 
 		rend = new DensityRenderer();
+		rend.initialize();
 		RenderConfig cfg = new RenderConfig(RenderConfig.MODE_2D);
 		rend.setConfig(cfg);
 		rend.setAxisRanges(ax, ay, az);

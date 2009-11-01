@@ -19,26 +19,7 @@ public class ReflectorRenderer extends AbstractRenderer {
 	private float kr;
 
 	public ReflectorRenderer() {
-		setDimensions(400, 400, 400);
-
-		varpos = new int[] { 1, 2, 3 };
-
-		conf = new RenderConfig(RenderConfig.MODE_3D);
-
-		points = new Sample[w][h];
-
-		// Chua
-		// grain = 0.0025f;
-		// kr = 0.05f;
-
-		grain = 0.0025f;
-		kr = 0.55f;
-
-		cam = new Camera();
-		cam.setEye(w / 2, h / 2, d * d);
-		cam.setZoom(0.8f);
-
-		setAllAxisRanges(new FloatRange(-50, 50));
+		super();
 	}
 
 	@Override
@@ -106,6 +87,28 @@ public class ReflectorRenderer extends AbstractRenderer {
 		public Sample(float w) {
 			this.w = w;
 		}
+	}
+
+	@Override
+	public void initialize() {
+		varpos = new int[] { 1, 2, 3 };
+
+		conf = new RenderConfig(RenderConfig.MODE_3D);
+
+		points = new Sample[w][h];
+
+		// Chua
+		// grain = 0.0025f;
+		// kr = 0.05f;
+
+		grain = 0.0025f;
+		kr = 0.55f;
+
+		cam = new Camera();
+		cam.setEye(w / 2, h / 2, d * d);
+		cam.setZoom(0.8f);
+
+		setAllAxisRanges(new FloatRange(-50, 50));
 	}
 
 }

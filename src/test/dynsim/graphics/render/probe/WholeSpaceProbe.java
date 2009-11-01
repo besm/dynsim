@@ -69,6 +69,7 @@ public class WholeSpaceProbe extends AppFrame {
 		}
 
 		rend = new GrainRenderer();
+		rend.initialize();
 		rend.setDetail(0.02f);
 		// rend.setAxisRanges(ax, ay, az);
 		ax.setMax(ax.getMax() + 0.1f);

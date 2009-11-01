@@ -89,6 +89,7 @@ public class IfsProbe extends AppFrame {
 		bounds(new IfsSimulator(sys));
 
 		rend = new DensityRenderer();
+		rend.initialize();
 		RenderConfig cfg = new RenderConfig(RenderConfig.MODE_2D);
 		rend.setConfig(cfg);
 		rend.setAxisRanges(ax, ay, az);

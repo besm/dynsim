@@ -61,6 +61,7 @@ public class RayProbe extends AppFrame {
 		bounds(new OdeSimulator(sys));
 
 		rend = new DirtyHax(sys);
+		rend.initialize();
 
 		ax.setMax(ax.getMax() + 0.1f);
 		ay.setMax(ay.getMax() + 0.1f);

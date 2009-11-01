@@ -40,6 +40,10 @@ public class RenderApp extends BaseApp {
 
 	private static final long serialVersionUID = 8893216423390898264L;
 
+	private static final int DEFAULT_HEIGHT = 400;
+
+	private static final int DEFAULT_WIDTH = 400;
+
 	public static void main(String[] args) {
 		BaseApp p = new RenderApp();
 		p.pack();
@@ -56,6 +60,10 @@ public class RenderApp extends BaseApp {
 	private JNumericSpinner gamma;
 	private JNumericSpinner scale;
 	private JNumericSpinner offset;
+
+	private JNumericSpinner widthSpin;
+	private JNumericSpinner heightSpin;
+	private JNumericSpinner depthSpin;
 
 	private ButtonGroup rendererChoice;
 
@@ -78,13 +86,6 @@ public class RenderApp extends BaseApp {
 		final Graphics g = img.getGraphics();
 		g.setColor(Color.GRAY);
 		g.fillRect(0, 0, img.getWidth(), img.getHeight());
-	}
-
-	protected void addToLeftConfigPanel() {
-		leftConfigPanel.add(createSystemFields());
-		leftConfigPanel.add(createSimulatorFields());
-		leftConfigPanel.add(createRenderFields());
-		leftConfigPanel.add(createPlayerButtons());
 	}
 
 	protected void afterSimulation() {
@@ -111,7 +112,7 @@ public class RenderApp extends BaseApp {
 		grainRadio = new JRadioButtonMenuItem("Grain");
 		rendererChoice.add(grainRadio);
 		rendermenu.add(grainRadio);
-		
+
 		densityRadio = new JRadioButtonMenuItem("Density");
 		rendererChoice.add(densityRadio);
 		rendermenu.add(densityRadio);
@@ -126,7 +127,7 @@ public class RenderApp extends BaseApp {
 			renderer = new CasterRenderer();
 		} else if (rendererChoice.isSelected(densityRadio.getModel())) {
 			renderer = new DensityRenderer();
-		}else if (rendererChoice.isSelected(grainRadio.getModel())) {
+		} else if (rendererChoice.isSelected(grainRadio.getModel())) {
 			renderer = new GrainRenderer();
 		} else if (rendererChoice.isSelected(reflectorRadio.getModel())) {
 			renderer = new ReflectorRenderer();
@@ -143,9 +144,10 @@ public class RenderApp extends BaseApp {
 		final JMenuBar menubar = createMenuBar();
 		setJMenuBar(menubar);
 
-		display = new DisplayImage(400, 400);
+		display = new DisplayImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		clearDisplay();
 		JPanel displayPane = new JPanel();
+		displayPane.setBackground(Color.GRAY);
 		displayPane.add(display);
 
 		JSplitPane viewPane = createSplitViewPanel(displayPane);
@@ -154,6 +156,7 @@ public class RenderApp extends BaseApp {
 		tabbedPane.addTab("View", null, viewPane, "Main view");
 
 		JPanel configPane = new JPanel();
+		configPane.add(createRenderFields());
 		tabbedPane.addTab("Configuration", configPane);
 
 		add(tabbedPane, BorderLayout.CENTER);
@@ -162,11 +165,20 @@ public class RenderApp extends BaseApp {
 	protected JComponent createRenderFields() {
 		JPanel panel = new JPanel(new SpringLayout());
 
-		String[] labelStrings = { "Grain: ", "Gamma: ", "Scale: ", "Offset: " };
+		String[] labelStrings = { "Width: ", "Height: ", "Depth: ", "Detail: ", "Gamma: ", "Scale: ", "Offset: " };
 
 		JLabel[] labels = new JLabel[labelStrings.length];
 		JComponent[] fields = new JComponent[labelStrings.length];
 		int fieldNum = 0;
+
+		widthSpin = new JNumericSpinner(DEFAULT_WIDTH, 50, 6000, 50);
+		fields[fieldNum++] = widthSpin;
+
+		heightSpin = new JNumericSpinner(DEFAULT_HEIGHT, 50, 6000, 50);
+		fields[fieldNum++] = heightSpin;
+
+		depthSpin = new JNumericSpinner(DEFAULT_WIDTH, 50, 6000, 50);
+		fields[fieldNum++] = depthSpin;
 
 		detail = new JNumericSpinner(0.015, 0.0, 5.0, 0.001);
 		detail.setEditor(new JNumericSpinner.NumberEditor(detail, "#0.0000"));
@@ -195,7 +207,16 @@ public class RenderApp extends BaseApp {
 		simulator.setSkip(skip.getInt());
 		simulator.setItersMax(maxiters.getInt());
 
+		final int w = widthSpin.getInt();
+		final int h = heightSpin.getInt();
+		if (display.getWidth() != w || display.getHeight() != h) {
+			display.setSize(w, h);
+			clearDisplay();
+		}
+
 		try {
+			renderer.setDimensions(w, h, depthSpin.getInt());
+			renderer.initialize();
 			renderer.setAutoAxisRanges();
 			renderer.setDetail(detail.getFloat());
 			renderer.setGamma(gamma.getFloat());

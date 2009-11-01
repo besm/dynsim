@@ -53,6 +53,7 @@ public class CasterProbe extends AppFrame {
 		sys = new Crispy();
 
 		rend = new CasterRenderer();
+		rend.initialize();
 		dyn = SimulatorFactory.createSimulator(sys, rend);
 
 		rend.setAutoAxisRanges();
