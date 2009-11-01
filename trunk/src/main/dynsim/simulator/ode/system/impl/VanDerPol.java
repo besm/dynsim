@@ -19,13 +19,17 @@ import dynsim.simulator.ode.system.AbstractOdeSystem;
 public class VanDerPol extends AbstractOdeSystem {
 	// a = 0.32, b = 0.2, g = 1.15
 	// a = 23.1, b = 0.5, g = 9.15
-	private double a = 0.32, b = 0.2, g = 1.15;
+	// private double a = 0.32, b = 0.2, g = 1.15;
 
 	private RealFunction fx, fy;
 
 	public VanDerPol() {
 		setInitialCondition("x", .0);
 		setInitialCondition("y", .0);
+
+		setParameter("a", 0.32);
+		setParameter("b", 0.2);
+		setParameter("g", 1.15);
 		// setInitialCondition("z", .14);
 		fx = new fx();
 		fy = new fy();
@@ -63,6 +67,8 @@ public class VanDerPol extends AbstractOdeSystem {
 			double x = vars[0];
 			double y = vars[1];
 			// double z = vars[2];
+			double a = getParameter("a");
+			double b = getParameter("b");
 
 			return b * (1 - x * x) * y - x + a * Math.cos(y * Math.PI);
 		}
@@ -70,7 +76,7 @@ public class VanDerPol extends AbstractOdeSystem {
 
 	class fz implements RealFunction {
 		public double eval(double[] vars) {
-			return g;
+			return getParameter("g");
 		}
 	}
 }
