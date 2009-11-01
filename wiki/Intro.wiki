@@ -1,7 +1,5 @@
 = Renders =
 
-== 3D HQ ==
-
 http://dynsim.googlecode.com/svn/wiki/images/st002.gif
 http://dynsim.googlecode.com/svn/wiki/images/casterend62495.gif
 http://dynsim.googlecode.com/svn/wiki/images/casterend65214.gif
