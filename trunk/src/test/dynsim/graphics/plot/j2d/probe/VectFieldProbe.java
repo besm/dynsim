@@ -12,7 +12,7 @@ import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
 import dynsim.graphics.plot.j2d.axis.Axis;
 import dynsim.graphics.plot.j2d.layer.field.VectField;
-import dynsim.graphics.plot.j2d.layer.field.impl.OdeVectField;
+import dynsim.graphics.plot.j2d.layer.field.impl.VectorField;
 import dynsim.simulator.ode.OdeSimulator;
 import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.*;
@@ -79,7 +79,7 @@ public class VectFieldProbe extends AppFrame {
 
 		// graph.setPlotVarX("x");
 		// graph.setPlotVarY("z");
-		OdeVectField vf = new OdeVectField(sys);
+		VectorField vf = new VectorField(sys);
 		// GradientVectField vf = new GradientVectField(sys);
 		vf.setGradient(new GradientPaint(0, 0, new Color(0, 255, 0, 0), 255, 0, new Color(0, 255, 0, 255), false));
 		vf.setStyle(VectField.GRAD_LINE);
