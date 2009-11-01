@@ -93,7 +93,7 @@ public class IfsProbe extends AppFrame {
 		rend.setConfig(cfg);
 		rend.setAxisRanges(ax, ay, az);
 		rend.setVarpos(new int[] { px, py, pz });
-		rend.setExposure(2f);
+		rend.setScale(2f);
 		rend.setDefaultCorrection();
 		rend.setGamma(0.5f);
 

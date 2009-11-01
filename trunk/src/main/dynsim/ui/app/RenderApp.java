@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -21,6 +22,7 @@ import dynsim.exceptions.DynSimException;
 import dynsim.graphics.render.Renderer;
 import dynsim.graphics.render.impl.CasterRenderer;
 import dynsim.graphics.render.impl.DensityRenderer;
+import dynsim.graphics.render.impl.GrainRenderer;
 import dynsim.graphics.render.impl.ReflectorRenderer;
 import dynsim.graphics.render.util.DisplayImage;
 import dynsim.simulator.SimulatorFactory;
@@ -63,6 +65,8 @@ public class RenderApp extends BaseApp {
 
 	private JRadioButtonMenuItem reflectorRadio;
 
+	private AbstractButton grainRadio;
+
 	public RenderApp() {
 		super("Renderer 0.9.0");
 		system = new Crispy();
@@ -104,6 +108,10 @@ public class RenderApp extends BaseApp {
 		rendererChoice.add(reflectorRadio);
 		rendermenu.add(reflectorRadio);
 
+		grainRadio = new JRadioButtonMenuItem("Grain");
+		rendererChoice.add(grainRadio);
+		rendermenu.add(grainRadio);
+		
 		densityRadio = new JRadioButtonMenuItem("Density");
 		rendererChoice.add(densityRadio);
 		rendermenu.add(densityRadio);
@@ -118,6 +126,8 @@ public class RenderApp extends BaseApp {
 			renderer = new CasterRenderer();
 		} else if (rendererChoice.isSelected(densityRadio.getModel())) {
 			renderer = new DensityRenderer();
+		}else if (rendererChoice.isSelected(grainRadio.getModel())) {
+			renderer = new GrainRenderer();
 		} else if (rendererChoice.isSelected(reflectorRadio.getModel())) {
 			renderer = new ReflectorRenderer();
 		}
@@ -158,7 +168,7 @@ public class RenderApp extends BaseApp {
 		JComponent[] fields = new JComponent[labelStrings.length];
 		int fieldNum = 0;
 
-		detail = new JNumericSpinner(0.015, 0.0, 2.0, 0.005);
+		detail = new JNumericSpinner(0.015, 0.0, 5.0, 0.001);
 		detail.setEditor(new JNumericSpinner.NumberEditor(detail, "#0.0000"));
 		fields[fieldNum++] = detail;
 
@@ -182,6 +192,8 @@ public class RenderApp extends BaseApp {
 		createRenderer();
 
 		simulator = SimulatorFactory.createSimulator(system, renderer);
+		simulator.setSkip(skip.getInt());
+		simulator.setItersMax(maxiters.getInt());
 
 		try {
 			renderer.setAutoAxisRanges();
