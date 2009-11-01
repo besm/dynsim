@@ -1,11 +1,6 @@
-= Introducción =
-
-Dynsim es un framework 100% java para la simulación y el análisis de sistemas dinámicos, especialmente no lineales.
-
-
 = Renders =
 
-== Phase space HQ ==
+== 3D HQ ==
 
 http://dynsim.googlecode.com/svn/wiki/images/st002.gif
 http://dynsim.googlecode.com/svn/wiki/images/casterend62495.gif
