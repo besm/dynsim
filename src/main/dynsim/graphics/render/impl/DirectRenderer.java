@@ -21,9 +21,6 @@ public abstract class DirectRenderer extends AbstractRenderer {
 
 	@Override
 	public void initialize() {
-		// TODO TOCAR al cambiar de ode a map
-		varpos = new int[] { 0, 1, 2 };
-
 		initImage();
 
 		conf = new RenderConfig(RenderConfig.MODE_2D);
