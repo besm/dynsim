@@ -36,14 +36,12 @@ import dynsim.graphics.plot.config.GrapherConfig;
 import dynsim.graphics.plot.config.GrapherConfig2D;
 import dynsim.graphics.plot.j2d.Grapher2D;
 import dynsim.graphics.plot.j2d.layer.field.VectField;
-import dynsim.graphics.plot.j2d.layer.field.impl.OdeVectField;
+import dynsim.graphics.plot.j2d.layer.field.impl.VectorField;
 import dynsim.math.analysis.local.CPoint;
 import dynsim.math.analysis.local.LocalStabilityAnalyser;
 import dynsim.simulator.color.ColoringStrategy;
 import dynsim.simulator.color.MultirampColors;
-import dynsim.simulator.ode.system.OdeSystem;
 import dynsim.simulator.ode.system.impl.Rossler;
-import dynsim.simulator.system.DynamicalSystem;
 import dynsim.ui.JNumericSpinner;
 import dynsim.ui.ShowColorChooserAction;
 import dynsim.ui.data.Pair;
@@ -56,10 +54,10 @@ public class PhaserApp extends BaseApp {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox) e.getSource();
 			Pair<ColoringStrategy> strategy = (Pair<ColoringStrategy>) cb.getSelectedItem();
-			if (strategy.getName().equals("Basic")) {
+			if (strategy.getName().equals(BASIC_COLORING_LABEL)) {
 				basicColoringPane.setVisible(true);
 				multirampColoringPane.setVisible(false);
-			} else if (strategy.getName().equals("Multiramp")) {
+			} else if (strategy.getName().equals(MULTIRAMP_COLORING_LABEL)) {
 				basicColoringPane.setVisible(false);
 				multirampColoringPane.setVisible(true);
 			}
@@ -86,6 +84,9 @@ public class PhaserApp extends BaseApp {
 
 	private static final int DEFAULT_TICK_STEP = 2;
 	private static final String STATUS_PREFIX = "Phaser: ";
+	protected static final String MULTIRAMP_COLORING_LABEL = "Multiramp";
+	protected static final String BASIC_COLORING_LABEL = "Basic";
+
 	private JLabel status;
 	private JPanel graphPane;
 	private JNumericSpinner tickStepX;
@@ -249,8 +250,8 @@ public class PhaserApp extends BaseApp {
 		int fieldNum = 0;
 
 		coloringStrategy = new JComboBox();
-		coloringStrategy.addItem(new Pair<ColoringStrategy>("Basic", null));
-		coloringStrategy.addItem(new Pair<ColoringStrategy>("Multiramp", new MultirampColors()));
+		coloringStrategy.addItem(new Pair<ColoringStrategy>(BASIC_COLORING_LABEL, null));
+		coloringStrategy.addItem(new Pair<ColoringStrategy>(MULTIRAMP_COLORING_LABEL, new MultirampColors()));
 		coloringStrategy.addActionListener(new ColoringStrategyListener());
 		fields[fieldNum++] = coloringStrategy;
 
@@ -426,15 +427,7 @@ public class PhaserApp extends BaseApp {
 		}
 
 		if (vectorLayer.isSelected()) {
-			if (system.getType() == DynamicalSystem.ODE_T) {
-				conf.setDrawConfig(GrapherConfig2D.DRAW_BORDER);
-				conf.setDrawConfig(GrapherConfig2D.DRAW_VECTFIELD);
-				OdeVectField vf = new OdeVectField((OdeSystem) system);
-				vf.setGradient(new GradientPaint(0, 0, new Color(0, 255, 0, 0), 255, 0, new Color(0, 255, 0, 255),
-						false));
-				vf.setStyle(VectField.GRAD_LINE);
-				graph.setVectField(vf);
-			}
+			initVectorField(conf, graph);
 		}
 
 		if (axisX.isSelected()) {
@@ -452,6 +445,15 @@ public class PhaserApp extends BaseApp {
 		if (axisTextY.isSelected()) {
 			conf.setDrawConfig(GrapherConfig2D.DRAW_AXIS_TEXT_Y);
 		}
+	}
+
+	private void initVectorField(GrapherConfig conf, final Grapher2D graph) {
+		conf.setDrawConfig(GrapherConfig2D.DRAW_BORDER);
+		conf.setDrawConfig(GrapherConfig2D.DRAW_VECTFIELD);
+		VectorField vf = new VectorField(system);
+		vf.setGradient(new GradientPaint(0, 0, new Color(0, 255, 0, 0), 255, 0, new Color(0, 255, 0, 255), false));
+		vf.setStyle(VectField.GRAD_LINE);
+		graph.setVectField(vf);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -473,7 +475,7 @@ public class PhaserApp extends BaseApp {
 		initDrawConfiguration(conf, graph);
 
 		initGrapherConf(conf, graph);
-		
+
 		initAnalysis(graph);
 
 		initColoring(data, conf, graph);

@@ -54,9 +54,9 @@ public abstract class AbstractRenderer implements Renderer {
 	protected Color backgroundColor;
 
 	protected float detail;
-	
+
 	protected String filename;
-	
+
 	protected String directory;
 
 	public String getDirectory() {
@@ -210,7 +210,7 @@ public abstract class AbstractRenderer implements Renderer {
 	public void reset() {
 		initImage();
 	}
-	
+
 	public void setDetail(float detail) {
 		this.detail = detail;
 	}
@@ -243,10 +243,7 @@ public abstract class AbstractRenderer implements Renderer {
 
 	public void setSimulator(final Simulator sim) {
 		this.sim = sim;
-
-		if (varPosIsNull()) {
-			varpos = getVarPosFromSim();
-		}
+		varpos = getVarPosFromSim();
 	}
 
 	// TODO revisar
@@ -349,7 +346,8 @@ public abstract class AbstractRenderer implements Renderer {
 		return false;
 	}
 
-	protected void procPixel(final int x, final int y, final double dx, final double dy, final double dz) throws DynSimException {
+	protected void procPixel(final int x, final int y, final double dx, final double dy, final double dz)
+			throws DynSimException {
 		// null imp.
 	}
 
@@ -415,8 +413,8 @@ public abstract class AbstractRenderer implements Renderer {
 	}
 
 	protected void writeToDisk(final String fname, final String ext, final String dir) throws IOException {
-//		final File f = File.createTempFile(fname, "." + ext, new File(dir));
-		final File f = new File(dir+"/"+fname+"."+ext);
+		// final File f = File.createTempFile(fname, "." + ext, new File(dir));
+		final File f = new File(dir + "/" + fname + "." + ext);
 		ImageIO.write(img, ext, f);
 	}
 
@@ -470,7 +468,4 @@ public abstract class AbstractRenderer implements Renderer {
 		return !(gamma == 1 && scale == 1 && offset == 0);
 	}
 
-	private boolean varPosIsNull() {
-		return (varpos == null) ? true : false;
-	}
 }

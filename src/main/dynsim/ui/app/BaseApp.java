@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractButton;
@@ -34,6 +35,10 @@ import dynsim.exceptions.DynSimException;
 import dynsim.simulator.Parameters;
 import dynsim.simulator.Simulator;
 import dynsim.simulator.SimulatorFactory;
+import dynsim.simulator.ifs.system.IteratedFunctionSystem;
+import dynsim.simulator.ifs.system.impl.StochasticFilteredIfs;
+import dynsim.simulator.ifs.system.loader.IfsDatum;
+import dynsim.simulator.ifs.system.loader.IfsLoader;
 import dynsim.simulator.system.DynamicalSystem;
 import dynsim.ui.JAppFrame;
 import dynsim.ui.JNumericSpinner;
@@ -87,14 +92,16 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 	private JNumericSpinner skip;
 	private JNumericSpinner maxiters;
 
-	protected HashMap<String, Class<DynamicalSystem>> systemClassNames;
+	protected HashMap<String, Class<? extends DynamicalSystem>> systemClassNames;
 	private AbstractButton stopMenuItem;
 	private JMenuItem runMenuItem;
+	private Map<String, IfsDatum> ifsMap;
 
 	private static final long serialVersionUID = -8767220695127049878L;
 
 	public BaseApp(String title) {
 		super(title);
+		systemClassNames = new HashMap<String, Class<? extends DynamicalSystem>>();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -120,13 +127,6 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		leftConfigPanel.add(createPlayerButtonBar());
 	}
 
-	protected Component createPlayerButtonBar() {
-		JToolBar toolbar = new JToolBar("Simulation player");
-		toolbar.setOrientation(JToolBar.VERTICAL);
-		toolbar.add(createPlayerButtons());
-		return toolbar;
-	}
-
 	protected abstract void afterSimulation();
 
 	protected void composePanel(JPanel panel, String title, String[] labelStrings, JLabel[] labels, JComponent[] fields) {
@@ -144,28 +144,6 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		SpringUtilities.makeCompactGrid(panel, labelStrings.length, 2, GAP, GAP, // init
 				// x,y
 				GAP, GAP / 2);// xpad, ypad
-	}
-
-	protected JComponent createPlayerButtons() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-		runsim = makeButton("Play24", RUNSIM_CMD, "Run simulation", "Run");
-		runsim.setVerticalTextPosition(AbstractButton.CENTER);
-		runsim.setHorizontalTextPosition(AbstractButton.LEADING);
-		runsim.setMnemonic(KeyEvent.VK_R);
-		panel.add(runsim);
-
-		stopsim = makeButton("Stop24", STOPSIM_CMD, "Stop simulation", "Stop");
-		stopsim.setEnabled(false);
-		stopsim.setVerticalTextPosition(AbstractButton.CENTER);
-		stopsim.setHorizontalTextPosition(AbstractButton.LEADING);
-		stopsim.setMnemonic(KeyEvent.VK_S);
-		panel.add(stopsim);
-
-		// Match the SpringLayout's gap, subtracting 5 to make
-		// up for the default gap FlowLayout provides.
-		panel.setBorder(BorderFactory.createEmptyBorder(0, 0, GAP - 5, GAP - 5));
-		return panel;
 	}
 
 	protected JPanel createLefBoxPanel() {
@@ -208,6 +186,35 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		filemenu.add(exit);
 
 		return menubar;
+	}
+
+	protected Component createPlayerButtonBar() {
+		JToolBar toolbar = new JToolBar("Simulation player");
+		toolbar.setOrientation(JToolBar.VERTICAL);
+		toolbar.add(createPlayerButtons());
+		return toolbar;
+	}
+
+	protected JComponent createPlayerButtons() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+		runsim = makeButton("Play24", RUNSIM_CMD, "Run simulation", "Run");
+		runsim.setVerticalTextPosition(AbstractButton.CENTER);
+		runsim.setHorizontalTextPosition(AbstractButton.LEADING);
+		runsim.setMnemonic(KeyEvent.VK_R);
+		panel.add(runsim);
+
+		stopsim = makeButton("Stop24", STOPSIM_CMD, "Stop simulation", "Stop");
+		stopsim.setEnabled(false);
+		stopsim.setVerticalTextPosition(AbstractButton.CENTER);
+		stopsim.setHorizontalTextPosition(AbstractButton.LEADING);
+		stopsim.setMnemonic(KeyEvent.VK_S);
+		panel.add(stopsim);
+
+		// Match the SpringLayout's gap, subtracting 5 to make
+		// up for the default gap FlowLayout provides.
+		panel.setBorder(BorderFactory.createEmptyBorder(0, 0, GAP - 5, GAP - 5));
+		return panel;
 	}
 
 	protected JMenu createRunMenu() {
@@ -289,6 +296,8 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		systemChoice = new ButtonGroup();
 
 		createOdeSubmenu(sysmenu);
+		createIteratedMapSubmenu(sysmenu);
+		createIFSSubmenu(sysmenu);
 
 		return sysmenu;
 	}
@@ -304,18 +313,42 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void loadOdeSystems() {
-		systemClassNames = new HashMap<String, Class<DynamicalSystem>>();
-		final Set<Class> classes = SystemLoader.getOdeSystemClasses();
+	protected void loadSystems(final Set<Class> classes) {
 		for (Class clazz : classes) {
 			systemClassNames.put(clazz.getSimpleName(), clazz);
 		}
 	}
 
+	protected JButton makeButton(String imageName, String actionCommand, String toolTipText, String altText) {
+		// Look for the image.
+		String imgLocation = "images/" + imageName + ".gif";
+		URL imageURL = BaseApp.class.getResource(imgLocation);
+
+		// Create and initialize the button.
+		JButton button = new JButton();
+		button.setActionCommand(actionCommand);
+		button.setToolTipText(toolTipText);
+		button.addActionListener(this);
+
+		if (imageURL != null) { // image found
+			button.setIcon(new ImageIcon(imageURL, altText));
+		} else { // no image found
+			button.setText(altText);
+			System.err.println("Resource not found: " + imgLocation);
+		}
+
+		return button;
+	}
+
 	protected DynamicalSystem newDynamicalSystem(String name) {
 		DynamicalSystem tmp = null;
 		try {
-			tmp = systemClassNames.get(name).newInstance();
+			final Class<? extends DynamicalSystem> clazz = systemClassNames.get(name);
+			if (IteratedFunctionSystem.class.isAssignableFrom(clazz)) {
+				tmp = new StochasticFilteredIfs(ifsMap.get(name));
+			} else {
+				tmp = clazz.newInstance();
+			}
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -329,21 +362,8 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		toogglePlayerComps();
 	}
 
-	private void toogglePlayerComps() {
-		tooggle(runsim);
-		tooggle(runMenuItem);
-		tooggle(stopsim);
-		tooggle(stopMenuItem);
-	}
-
 	protected void onSimulationStart() {
 		toogglePlayerComps();
-	}
-
-	protected void tooggle(JComponent component) {
-		if (component != null) {
-			component.setEnabled(!component.isEnabled());
-		}
 	}
 
 	protected void prepareSystem() {
@@ -384,14 +404,50 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		}
 	}
 
-	private void createOdeSubmenu(JMenu sysmenu) {
-		JMenu submenu = new JMenu("ODE");
-		submenu.setMnemonic(KeyEvent.VK_O);
+	protected void tooggle(JComponent component) {
+		if (component != null) {
+			component.setEnabled(!component.isEnabled());
+		}
+	}
+
+	private void createIFSSubmenu(JMenu sysmenu) {
+		IfsLoader loader = new IfsLoader();
+		loader.loadFromFile("data/test/ifs/ifs.xml");
+		ifsMap = loader.getIfsMap();
+
+		JMenu submenu = new JMenu("IFS");
+		submenu.setMnemonic(KeyEvent.VK_F);
 		sysmenu.add(submenu);
 
-		loadOdeSystems();
+		for (String key : ifsMap.keySet()) {
+			systemClassNames.put(key, IteratedFunctionSystem.class);
+			JRadioButtonMenuItem radio = new JRadioButtonMenuItem(key);
+			radio.setActionCommand(REFRESH_UI_CMD);
+			radio.addActionListener(this);
+			radio.setName(key);
+			systemChoice.add(radio);
+			submenu.add(radio);
+		}
+	}
 
-		for (String sysname : systemClassNames.keySet()) {
+	private void createIteratedMapSubmenu(JMenu sysmenu) {
+		createSystemMenu("IteratedMap", KeyEvent.VK_M, SystemLoader.getMapSystemClasses(), sysmenu);
+	}
+
+	private void createOdeSubmenu(JMenu sysmenu) {
+		createSystemMenu("ODE", KeyEvent.VK_O, SystemLoader.getOdeSystemClasses(), sysmenu);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createSystemMenu(String name, int keyEvent, Set<Class> classes, JMenu sysmenu) {
+		JMenu submenu = new JMenu(name);
+		submenu.setMnemonic(keyEvent);
+		sysmenu.add(submenu);
+
+		loadSystems(classes);
+
+		for (Class sysclass : classes) {
+			String sysname = sysclass.getSimpleName();
 			JRadioButtonMenuItem radio = new JRadioButtonMenuItem(sysname);
 			radio.setActionCommand(REFRESH_UI_CMD);
 			radio.addActionListener(this);
@@ -401,24 +457,10 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		}
 	}
 
-	protected JButton makeButton(String imageName, String actionCommand, String toolTipText, String altText) {
-		// Look for the image.
-		String imgLocation = "images/" + imageName + ".gif";
-		URL imageURL = BaseApp.class.getResource(imgLocation);
-
-		// Create and initialize the button.
-		JButton button = new JButton();
-		button.setActionCommand(actionCommand);
-		button.setToolTipText(toolTipText);
-		button.addActionListener(this);
-
-		if (imageURL != null) { // image found
-			button.setIcon(new ImageIcon(imageURL, altText));
-		} else { // no image found
-			button.setText(altText);
-			System.err.println("Resource not found: " + imgLocation);
-		}
-
-		return button;
+	private void toogglePlayerComps() {
+		tooggle(runsim);
+		tooggle(runMenuItem);
+		tooggle(stopsim);
+		tooggle(stopMenuItem);
 	}
 }
