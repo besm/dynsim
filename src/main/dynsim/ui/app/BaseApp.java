@@ -275,18 +275,21 @@ public abstract class BaseApp extends JAppFrame implements ActionListener, ItemL
 		JPanel panel = new JPanel(new SpringLayout());
 		final Parameters params = system.getParameters();
 
-		parameterLabels = new String[params.size()];
-		JLabel[] labels = new JLabel[parameterLabels.length];
-		parameterFields = new JNumericSpinner[parameterLabels.length];
+		if (params.size() > 0) {
+			parameterLabels = new String[params.size()];
+			JLabel[] labels = new JLabel[parameterLabels.length];
+			parameterFields = new JNumericSpinner[parameterLabels.length];
 
-		int fieldNum = 0;
-		for (String key : params.getLabels()) {
-			parameterLabels[fieldNum] = key;
-			JNumericSpinner field = new JNumericSpinner(params.getValue(key), -100, 100, 0.01);
-			parameterFields[fieldNum++] = field;
+			int fieldNum = 0;
+			for (String key : params.getLabels()) {
+				parameterLabels[fieldNum] = key;
+				JNumericSpinner field = new JNumericSpinner(params.getValue(key), -100, 100, 0.01);
+				parameterFields[fieldNum++] = field;
+			}
+
+			composePanel(panel, system.toString() + " Properties", parameterLabels, labels, parameterFields);
 		}
-
-		composePanel(panel, system.toString() + " Properties", parameterLabels, labels, parameterFields);
+		
 		return panel;
 	}
 
