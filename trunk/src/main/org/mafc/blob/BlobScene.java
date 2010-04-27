@@ -71,7 +71,7 @@ public class BlobScene extends AnimationComponent {
 		}
 
 		// pal = new Palette();
-		pal = new Palette(0.f, 0.5f);
+		pal = new Palette(0.0f, 0.5f); // 0.35, 0.95
 		blobs = new ArrayList<Blob>();
 
 		int pxr2 = pixelRes / 2;

@@ -43,6 +43,11 @@ public class AnimationFrame extends AppFrame {
 		init(acl, fsem);
 	}
 
+	public AnimationFrame(String title, AnimationComponent ac, int w, int h, boolean fsem) {
+		this(title, ac, fsem);
+		setSize(w, h);
+	}
+
 	private void init(ArrayList<AnimationComponent> acl, boolean fsem) {
 		this.fsem = fsem;
 
